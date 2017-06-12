@@ -15,7 +15,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/stts-se/pronlex/decompounder"
+	"github.com/stts-se/decomp"
 )
 
 type decomperMutex struct {
