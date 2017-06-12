@@ -46,7 +46,7 @@ func (t *tNode) add(s string) *tNode {
 	// This path so far already exists.
 	// Recursively keep adding
 	if son, ok := t.sons[r]; ok {
-		if len(s) == 1 {
+		if utf8.RuneCountInString(s) == 1 {
 			son.leaf = true
 			// This is where you could increment a frequency counter.
 			// You'd want to add a frequency field to both tNode and arc.
@@ -56,7 +56,7 @@ func (t *tNode) add(s string) *tNode {
 	} else { // new path
 		son := NewtNode()
 		son.r = r
-		if len(s) == 1 {
+		if utf8.RuneCountInString(s) == 1 {
 			son.leaf = true
 		}
 		t.sons[r] = son
@@ -102,7 +102,7 @@ func (t *tNode) remove(s string) bool {
 	sons := t.sons
 	for i, r := range s {
 		if v, ok := sons[r]; ok {
-			if i == len(s)-1 { // last rune of s
+			if i == utf8.RuneCountInString(s)-1 { // last rune of s
 				v.leaf = false
 				return true
 			}
@@ -167,7 +167,7 @@ func (t *tNode) prefixes(s string) []arc {
 		if v, ok := sons[r]; ok {
 			sons = v.sons
 			// '&& i < len(s)-1' ensures that the prefix is shorter than s
-			if v.leaf && i < len(s)-1 {
+			if v.leaf && i < utf8.RuneCountInString(s)-1 {
 				res = append(res, arc{end: i + 1, cat: prefix})
 			}
 		} else { // not a path in tree
