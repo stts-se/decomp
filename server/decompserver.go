@@ -326,6 +326,13 @@ func decompMain(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", "TO DO")
 }
 
+func mainHandler(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Fprintf(w, strings.Join(walkedURLs, "\n"))
+}
+
+var walkedURLs = []string{}
+
 func main() {
 
 	if len(os.Args) != 2 {
@@ -370,6 +377,7 @@ func main() {
 
 	r := mux.NewRouter().StrictSlash(true)
 
+	r.HandleFunc("/", mainHandler).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
 	r.HandleFunc("/decomp/decomp", decompWord).Methods("get", "post")
 	r.HandleFunc("/decomp/add_prefix", addPrefix).Methods("get", "post")
@@ -378,11 +386,21 @@ func main() {
 	r.HandleFunc("/decomp/remove_suffix", removeSuffix).Methods("get", "post")
 	r.HandleFunc("/decomp/list_languages", listLanguages).Methods("get", "post")
 
-	r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))
-	r.PathPrefix("/decomp/built/").Handler(r0)
+	//r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))
+	//r.PathPrefix("/decomp/built/").Handler(r0)
 
-	r1 := http.StripPrefix("/decomp/externals/", http.FileServer(http.Dir("./externals/")))
-	r.PathPrefix("/decomp/externals/").Handler(r1)
+	//r1 := http.StripPrefix("/decomp/externals/", http.FileServer(http.Dir("./externals/")))
+	//r.PathPrefix("/decomp/externals/").Handler(r1)
+
+	// List  route URLs
+	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		t, err := route.GetPathTemplate()
+		if err != nil {
+			return err
+		}
+		walkedURLs = append(walkedURLs, t)
+		return nil
+	})
 
 	port := ":6778"
 	log.Printf("starting decomp server at port %s\n", port)
