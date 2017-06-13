@@ -321,7 +321,9 @@ func listLanguages(w http.ResponseWriter, r *http.Request) {
 
 func decompMain(w http.ResponseWriter, r *http.Request) {
 	// TODO error if file not found
-	http.ServeFile(w, r, "./src/decomp_demo.html")
+	//http.ServeFile(w, r, "./src/decomp_demo.html")
+	fmt.Printf("decompMain: PENDING")
+	fmt.Fprintf(w, "%s", "TO DO")
 }
 
 func main() {
