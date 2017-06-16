@@ -21,7 +21,7 @@ import (
 type decomperMutex struct {
 	// map from language name to decompounder, as read from word parts file dir.
 	// lang is used as HTTP request parameter to select a decompounder
-	decompers map[string]decompounder.Decompounder
+	decompers map[string]decomp.Decompounder
 	// map from language name to word parts file name path.  Used
 	// for appending new word parts to the original text file, to
 	// keep the word parts text file in sync with the in-memory
@@ -31,7 +31,7 @@ type decomperMutex struct {
 }
 
 var decomper = decomperMutex{
-	decompers: make(map[string]decompounder.Decompounder),
+	decompers: make(map[string]decomp.Decompounder),
 	files:     make(map[string]string),
 	mutex:     &sync.RWMutex{},
 }
@@ -360,7 +360,7 @@ func main() {
 			continue
 		}
 
-		dc, err := decompounder.NewDecompounderFromFile(fn)
+		dc, err := decomp.NewDecompounderFromFile(fn)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%v\n", err)
 			fmt.Fprintf(os.Stderr, "decompserver: skipping file: '%s'\n", fn)
@@ -384,6 +384,9 @@ func main() {
 	r.HandleFunc("/decomp/remove_prefix", removePrefix).Methods("get", "post")
 	r.HandleFunc("/decomp/add_suffix", addSuffix).Methods("get", "post")
 	r.HandleFunc("/decomp/remove_suffix", removeSuffix).Methods("get", "post")
+	// TODO: Rename list_languages? It lists the available word
+	// part files rather than languages. These need not be the
+	// same.
 	r.HandleFunc("/decomp/list_languages", listLanguages).Methods("get", "post")
 
 	//r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))

@@ -1,4 +1,4 @@
-package decompounder
+package decomp //ounder
 
 import (
 	"bufio"
