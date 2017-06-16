@@ -299,7 +299,7 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(j))
 }
 
-func listLanguages(w http.ResponseWriter, r *http.Request) {
+func listLexiconFiles(w http.ResponseWriter, r *http.Request) {
 
 	decomper.mutex.RLock()
 	var res []string // res0 contains path to file
@@ -384,10 +384,7 @@ func main() {
 	r.HandleFunc("/decomp/remove_prefix", removePrefix).Methods("get", "post")
 	r.HandleFunc("/decomp/add_suffix", addSuffix).Methods("get", "post")
 	r.HandleFunc("/decomp/remove_suffix", removeSuffix).Methods("get", "post")
-	// TODO: Rename list_languages? It lists the available word
-	// part files rather than languages. These need not be the
-	// same.
-	r.HandleFunc("/decomp/list_languages", listLanguages).Methods("get", "post")
+	r.HandleFunc("/decomp/list_decomp_files", listLexiconFiles).Methods("get", "post")
 
 	//r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))
 	//r.PathPrefix("/decomp/built/").Handler(r0)
