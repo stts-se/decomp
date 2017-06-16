@@ -377,6 +377,8 @@ func main() {
 
 	r := mux.NewRouter().StrictSlash(true)
 
+	// TODO: Change params into URL variables (Gorilla mux matching)
+
 	r.HandleFunc("/", mainHandler).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
 	r.HandleFunc("/decomp/decomp", decompWord).Methods("get", "post")
