@@ -218,22 +218,10 @@ func langFromFilePath(p string) string {
 func decompWord(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	decomperName := vars["decomper_name"]
-	// if "" == decomperName {
-	// 	msg := "no value for the expected 'decomper_name' part of the URL"
-	// 	log.Println(msg)
-	// 	http.Error(w, msg, http.StatusBadRequest)
-	// 	return
-	// }
 
+	decomperName := vars["decomper_name"]
 	word := vars["word"]
 	word = strings.ToLower(word)
-	// if "" == word {
-	// 	msg := "no value for the expected 'word' part of the URL"
-	// 	log.Println(msg)
-	// 	http.Error(w, msg, http.StatusBadRequest)
-	// 	return
-	// }
 
 	var res []Decomp
 	decomper.mutex.RLock()
@@ -345,8 +333,6 @@ func main() {
 
 	r := mux.NewRouter().StrictSlash(true)
 
-	// TODO: Change params into URL variables (Gorilla mux matching)
-
 	r.HandleFunc("/", mainHandler).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
 	r.HandleFunc("/decomp/list_decompers", listDecompers).Methods("get", "post")
@@ -356,7 +342,7 @@ func main() {
 	r.HandleFunc("/decomp/{decomper_name}/add_suffix/{suffix}", addSuffix).Methods("get")       //, "post")
 	r.HandleFunc("/decomp/{decomper_name}/remove_suffix/{suffix}", removeSuffix).Methods("get") //, "post")
 
-	// List  route URLs
+	// List route URLs to use as simple on-line documentation (at "/")
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		t, err := route.GetPathTemplate()
 		if err != nil {
