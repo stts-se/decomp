@@ -299,7 +299,7 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(j))
 }
 
-func listLexiconFiles(w http.ResponseWriter, r *http.Request) {
+func listDecompers(w http.ResponseWriter, r *http.Request) {
 
 	decomper.mutex.RLock()
 	var res []string // res0 contains path to file
@@ -381,12 +381,12 @@ func main() {
 
 	r.HandleFunc("/", mainHandler).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
-	r.HandleFunc("/decomp/decomp", decompWord).Methods("get", "post")
-	r.HandleFunc("/decomp/add_prefix", addPrefix).Methods("get", "post")
-	r.HandleFunc("/decomp/remove_prefix", removePrefix).Methods("get", "post")
-	r.HandleFunc("/decomp/add_suffix", addSuffix).Methods("get", "post")
-	r.HandleFunc("/decomp/remove_suffix", removeSuffix).Methods("get", "post")
-	r.HandleFunc("/decomp/list_decomp_files", listLexiconFiles).Methods("get", "post")
+	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")   //, "post")
+	r.HandleFunc("/decomp/add_prefix/{prefix}", addPrefix).Methods("get")       //, "post")
+	r.HandleFunc("/decomp/remove_prefix/{prefix}", removePrefix).Methods("get") //, "post")
+	r.HandleFunc("/decomp/add_suffix/{suffix}", addSuffix).Methods("get")       //, "post")
+	r.HandleFunc("/decomp/remove_suffix/{suffix}", removeSuffix).Methods("get") //, "post")
+	r.HandleFunc("/decomp/list_decompers", listDecompers).Methods("get", "post")
 
 	//r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))
 	//r.PathPrefix("/decomp/built/").Handler(r0)
