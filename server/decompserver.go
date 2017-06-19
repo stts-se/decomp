@@ -56,38 +56,39 @@ func appendToWordPartsFile(fn string, line string) error {
 
 func addPrefix(w http.ResponseWriter, r *http.Request) {
 
-	lang := r.FormValue("lang")
-	if "" == lang {
-		msg := "no value for the expected 'lang' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	vars := mux.Vars(r)
+	decomperName := vars["decomper_name"]
+	// if "" == lang {
+	// 	msg := "no value for the expected 'lang' parameter"
+	// 	log.Println(msg)
+	// 	http.Error(w, msg, http.StatusBadRequest)
+	// 	return
+	// }
 
-	prefix := strings.ToLower(r.FormValue("prefix"))
-	if "" == prefix {
-		msg := "no value for the expected 'prefix' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	prefix := strings.ToLower(vars["prefix"])
+	// if "" == prefix {
+	// 	msg := "no value for the expected 'prefix' parameter"
+	// 	log.Println(msg)
+	// 	http.Error(w, msg, http.StatusBadRequest)
+	// 	return
+	// }
 
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
-	fn, ok := decomper.files[lang]
+	fn, ok := decomper.files[decomperName]
 	if !ok {
-		msg := "unknown 'lang': " + lang
+		msg := "unknown decomper: " + decomperName
 		log.Println(msg)
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	if decomper.decompers[lang].ContainsPrefix(prefix) {
+	if decomper.decompers[decomperName].ContainsPrefix(prefix) {
 		fmt.Fprintf(w, "prefix already found: '%s'", prefix)
 		return
 	}
 
-	decomper.decompers[lang].AddPrefix(prefix)
+	decomper.decompers[decomperName].AddPrefix(prefix)
 	err := appendToWordPartsFile(fn, "PREFIX:"+prefix)
 	if err != nil {
 		msg := fmt.Sprintf("decompounder: failed to append to word parts file : %v", err)
@@ -102,38 +103,26 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 // TODO cut-and-paste of addPrefix
 func removePrefix(w http.ResponseWriter, r *http.Request) {
 
-	lang := r.FormValue("lang")
-	if "" == lang {
-		msg := "no value for the expected 'lang' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	vars := mux.Vars(r)
+	decomperName := vars["decomper_name"]
 
-	prefix := strings.ToLower(r.FormValue("prefix"))
-	if "" == prefix {
-		msg := "no value for the expected 'prefix' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
-
+	prefix := vars["prefix"]
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
-	fn, ok := decomper.files[lang]
+	fn, ok := decomper.files[decomperName]
 	if !ok {
-		msg := "unknown 'lang': " + lang
+		msg := "unknown decomper: " + decomperName
 		log.Println(msg)
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
 	//writeToWordPartsFile("PREFIX")
-	if !decomper.decompers[lang].ContainsPrefix(prefix) {
+	if !decomper.decompers[decomperName].ContainsPrefix(prefix) {
 		fmt.Fprintf(w, "prefix not found: '%s'", prefix)
 		return
 	}
-	decomper.decompers[lang].RemovePrefix(prefix)
+	decomper.decompers[decomperName].RemovePrefix(prefix)
 	err := appendToWordPartsFile(fn, "REMOVE:PREFIX:"+prefix)
 	if err != nil {
 		msg := fmt.Sprintf("decompounder: failed to append to word parts file : %v", err)
@@ -147,38 +136,27 @@ func removePrefix(w http.ResponseWriter, r *http.Request) {
 
 func addSuffix(w http.ResponseWriter, r *http.Request) {
 
-	lang := r.FormValue("lang")
-	if "" == lang {
-		msg := "no value for the expected 'lang' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	vars := mux.Vars(r)
 
-	suffix := r.FormValue("suffix")
-	if "" == suffix {
-		msg := "no value for the expected 'suffix' parameter"
-		log.Println()
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	decomperName := vars["decomper_name"]
+	suffix := vars["suffix"]
 
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
-	fn, ok := decomper.files[lang]
+	fn, ok := decomper.files[decomperName]
 	if !ok {
-		msg := "unknown 'lang': " + lang
+		msg := "unknown decomper: " + decomperName
 		log.Println(msg)
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	if decomper.decompers[lang].ContainsSuffix(suffix) {
+	if decomper.decompers[decomperName].ContainsSuffix(suffix) {
 		fmt.Fprintf(w, "sufffix already found: '%s'", suffix)
 		return
 	}
 
-	decomper.decompers[lang].AddSuffix(suffix)
+	decomper.decompers[decomperName].AddSuffix(suffix)
 	err := appendToWordPartsFile(fn, "SUFFIX:"+suffix)
 	if err != nil {
 		msg := fmt.Sprintf("decompounder: failed to append to word parts file : %v", err)
@@ -193,37 +171,26 @@ func addSuffix(w http.ResponseWriter, r *http.Request) {
 // TODO cut-and-paste of addSuffix
 func removeSuffix(w http.ResponseWriter, r *http.Request) {
 
-	lang := r.FormValue("lang")
-	if "" == lang {
-		msg := "no value for the expected 'lang' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	vars := mux.Vars(r)
 
-	suffix := r.FormValue("suffix")
-	if "" == suffix {
-		msg := "no value for the expected 'suffix' parameter"
-		log.Println()
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	decomperName := vars["decomper_name"]
+	suffix := vars["suffix"]
 
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
-	fn, ok := decomper.files[lang]
+	fn, ok := decomper.files[decomperName]
 	if !ok {
-		msg := "unknown 'lang': " + lang
+		msg := "unknown decomper: " + decomperName
 		log.Println(msg)
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	if !decomper.decompers[lang].ContainsSuffix(suffix) {
+	if !decomper.decompers[decomperName].ContainsSuffix(suffix) {
 		fmt.Fprintf(w, "suffix not found: '%s'", suffix)
 		return
 	}
-	decomper.decompers[lang].RemoveSuffix(suffix)
+	decomper.decompers[decomperName].RemoveSuffix(suffix)
 	err := appendToWordPartsFile(fn, "REMOVE:SUFFIX:"+suffix)
 	if err != nil {
 		msg := fmt.Sprintf("decompounder: failed to append to word parts file : %v", err)
@@ -250,40 +217,41 @@ func langFromFilePath(p string) string {
 
 func decompWord(w http.ResponseWriter, r *http.Request) {
 
-	lang := r.FormValue("lang")
-	if "" == lang {
-		msg := "no value for the expected 'lang' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	vars := mux.Vars(r)
+	decomperName := vars["decomper_name"]
+	// if "" == decomperName {
+	// 	msg := "no value for the expected 'decomper_name' part of the URL"
+	// 	log.Println(msg)
+	// 	http.Error(w, msg, http.StatusBadRequest)
+	// 	return
+	// }
 
-	word := r.FormValue("word")
+	word := vars["word"]
 	word = strings.ToLower(word)
-	if "" == word {
-		msg := "no value for the expected 'word' parameter"
-		log.Println(msg)
-		http.Error(w, msg, http.StatusBadRequest)
-		return
-	}
+	// if "" == word {
+	// 	msg := "no value for the expected 'word' part of the URL"
+	// 	log.Println(msg)
+	// 	http.Error(w, msg, http.StatusBadRequest)
+	// 	return
+	// }
 
 	var res []Decomp
 	decomper.mutex.RLock()
 	defer decomper.mutex.RUnlock()
-	_, ok := decomper.files[lang]
+	_, ok := decomper.files[decomperName]
 	if !ok {
-		msg := "unknown 'lang': " + lang
-		var langs []string
+		msg := "unknown 'decomper': " + decomperName
+		var decompers []string
 		for l, _ := range decomper.decompers {
-			langs = append(langs, l)
+			decompers = append(decompers, l)
 		}
-		msg = fmt.Sprintf("%s. Known 'lang' values: %s", msg, strings.Join(langs, ", "))
+		msg = fmt.Sprintf("%s. Known decomper names: %s", msg, strings.Join(decompers, ", "))
 		log.Println(msg)
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
 
-	for _, d := range decomper.decompers[lang].Decomp(word) {
+	for _, d := range decomper.decompers[decomperName].Decomp(word) {
 		res = append(res, Decomp{Parts: d})
 	}
 	log.Println(res)
@@ -381,18 +349,12 @@ func main() {
 
 	r.HandleFunc("/", mainHandler).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
-	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")   //, "post")
-	r.HandleFunc("/decomp/add_prefix/{prefix}", addPrefix).Methods("get")       //, "post")
-	r.HandleFunc("/decomp/remove_prefix/{prefix}", removePrefix).Methods("get") //, "post")
-	r.HandleFunc("/decomp/add_suffix/{suffix}", addSuffix).Methods("get")       //, "post")
-	r.HandleFunc("/decomp/remove_suffix/{suffix}", removeSuffix).Methods("get") //, "post")
 	r.HandleFunc("/decomp/list_decompers", listDecompers).Methods("get", "post")
-
-	//r0 := http.StripPrefix("/decomp/built/", http.FileServer(http.Dir("./built/")))
-	//r.PathPrefix("/decomp/built/").Handler(r0)
-
-	//r1 := http.StripPrefix("/decomp/externals/", http.FileServer(http.Dir("./externals/")))
-	//r.PathPrefix("/decomp/externals/").Handler(r1)
+	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")                   //, "post")
+	r.HandleFunc("/decomp/{decomper_name}/add_prefix/{prefix}", addPrefix).Methods("get")       //, "post")
+	r.HandleFunc("/decomp/{decomper_name}/remove_prefix/{prefix}", removePrefix).Methods("get") //, "post")
+	r.HandleFunc("/decomp/{decomper_name}/add_suffix/{suffix}", addSuffix).Methods("get")       //, "post")
+	r.HandleFunc("/decomp/{decomper_name}/remove_suffix/{suffix}", removeSuffix).Methods("get") //, "post")
 
 	// List  route URLs
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
