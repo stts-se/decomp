@@ -295,8 +295,11 @@ func (t SuffixTree) Suffixes(s string) []arc {
 }
 
 type Decompounder struct {
-	prefixes PrefixTree
-	suffixes SuffixTree
+	prefixes    PrefixTree
+	suffixes    SuffixTree
+	tripleChars []rune // Chars that may be contracted into two
+	// when occurring at compound boundaries:
+	// 'natt'+'tåg' => 'nattåg'
 }
 
 func NewDecompounder() Decompounder {
