@@ -11,7 +11,7 @@ import (
 )
 
 // decomper is a command line utility for running the decomp.Decomp decompounder.
-
+// Sample invocation: go run decomper.go ../../server/decomp_files/sv_nst.txt hundparkering
 func main() {
 
 	if len(os.Args) < 2 {
