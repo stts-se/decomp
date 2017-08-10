@@ -14,11 +14,8 @@ import (
 
 func main() {
 
-	var wds []string
-
-	// FLags: -help:
 	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr, "decomper <DEOMCP FILE> <words...>\n")
+		fmt.Fprintf(os.Stderr, "decomper <DECOMP FILE> <words...>|<STDIN>\n")
 		os.Exit(0)
 	}
 
@@ -28,8 +25,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "decomper: failed to load file '%s' : %v\n", fn, err)
 		os.Exit(1)
 	}
-	_ = decomp
 
+	var wds []string
 	// words as command line args
 	if len(os.Args) > 2 {
 		wds = os.Args[2:]
@@ -50,8 +47,13 @@ func main() {
 	}
 
 	for _, w := range wds {
-		for _, ds := range decomp.Decomp(w) {
-			fmt.Printf("%s\t%v\n", w, strings.Join(ds, "+"))
+
+		ds := decomp.Decomp(w)
+		if len(ds) == 0 {
+			fmt.Printf("%s\t?\n", w)
+		}
+		for _, d := range ds {
+			fmt.Printf("%s\t%v\n", w, strings.Join(d, "+"))
 		}
 	}
 
