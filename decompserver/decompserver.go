@@ -202,7 +202,7 @@ func removeSuffix(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "removed '%s'", suffix)
 }
 
-type Decomp struct {
+type decomps struct {
 	Parts []string `json:"parts"`
 }
 
@@ -223,7 +223,7 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	word := vars["word"]
 	word = strings.ToLower(word)
 
-	var res []Decomp
+	var res []decomps
 	decomper.mutex.RLock()
 	defer decomper.mutex.RUnlock()
 	_, ok := decomper.files[decomperName]
@@ -240,7 +240,7 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, d := range decomper.decompers[decomperName].Decomp(word) {
-		res = append(res, Decomp{Parts: d})
+		res = append(res, decomps{Parts: d})
 	}
 	log.Println(res)
 
