@@ -230,7 +230,7 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		msg := "unknown 'decomper': " + decomperName
 		var decompers []string
-		for l, _ := range decomper.decompers {
+		for l := range decomper.decompers {
 			decompers = append(decompers, l)
 		}
 		msg = fmt.Sprintf("%s. Known decomper names: %s", msg, strings.Join(decompers, ", "))
@@ -259,7 +259,7 @@ func listDecompers(w http.ResponseWriter, r *http.Request) {
 
 	decomper.mutex.RLock()
 	var res []string // res0 contains path to file
-	for l, _ := range decomper.decompers {
+	for l := range decomper.decompers {
 		res = append(res, l)
 	}
 	decomper.mutex.RUnlock()
