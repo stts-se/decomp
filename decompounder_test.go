@@ -453,7 +453,7 @@ func TestInfixS(t *testing.T) {
 
 }
 
-func TestLodFromFile(t *testing.T) {
+func TestLoadFromFile(t *testing.T) {
 	d, err := NewDecompounderFromFile("test_word_parts.txt")
 	if err != nil {
 		t.Errorf("%v", err)
