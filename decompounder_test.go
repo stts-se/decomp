@@ -19,9 +19,9 @@ func contains(ss []string, s string) bool {
 	return false
 }
 
-func Test_Tree(t *testing.T) {
+func TestTree(t *testing.T) {
 
-	tr := NewtNode()
+	tr := newtNode()
 
 	if want, got := rune(0), tr.r; want != got {
 		t.Errorf(ts, want, got)
@@ -100,7 +100,7 @@ func Test_Tree(t *testing.T) {
 	//     fmt.Printf("PREFIX: %v\n", s1[p.start:p.end])
 	// }
 
-	pt := NewPrefixTree()
+	pt := newPrefixTree()
 	pt.Add("ap")
 	pt.Add("hund")
 	pt.Add("aphund")
@@ -120,7 +120,7 @@ func Test_Tree(t *testing.T) {
 		t.Errorf(ts, "'aphund'", "nothing")
 	}
 
-	st := NewSuffixTree()
+	st := newSuffixTree()
 
 	st.Add("rot")
 	st.Add("mos")
@@ -149,7 +149,7 @@ func Test_Tree(t *testing.T) {
 
 }
 
-func Test_Paths(t *testing.T) {
+func TestPaths(t *testing.T) {
 
 	a1 := arc{start: 0, end: 3}
 	a2 := arc{start: 3, end: 7}
@@ -164,8 +164,8 @@ func Test_Paths(t *testing.T) {
 		t.Errorf("AAAA! %d %d", want, got)
 
 	}
-	a1_ := p[0]
-	if want, got := 0, a1_.start; want != got {
+	a1b := p[0]
+	if want, got := 0, a1b.start; want != got {
 		t.Errorf("AAAA! %d %d", want, got)
 
 	}
@@ -185,7 +185,7 @@ func Test_Paths(t *testing.T) {
 	//fmt.Printf("\n%#v\n", res)
 }
 
-func Test_Decompounder(t *testing.T) {
+func TestDecompounder(t *testing.T) {
 
 	d := NewDecompounder()
 
@@ -240,7 +240,7 @@ func Test_Decompounder(t *testing.T) {
 	}
 }
 
-func Test_Decomp_RecursivePrefixes(t *testing.T) {
+func TestDecompRecursivePrefixes(t *testing.T) {
 
 	decomp := NewDecompounder()
 	decomp.AddPrefix("svavel")
@@ -349,7 +349,7 @@ func Test_Decomp_RecursivePrefixes(t *testing.T) {
 	//fmt.Println("OBS: bugg: alen -> ale+n (stockholmsfinalen)")
 }
 
-func Test_Alen(t *testing.T) {
+func TestAlen(t *testing.T) {
 	decomp := NewDecompounder()
 	decomp.AddPrefix("ale")
 	decomp.AddPrefix("n")
@@ -383,7 +383,7 @@ func Test_Alen(t *testing.T) {
 
 }
 
-func Test_LenSort(t *testing.T) {
+func TestLenSort(t *testing.T) {
 
 	// return the versions with fewest compound parts first
 
@@ -409,7 +409,7 @@ func Test_LenSort(t *testing.T) {
 
 }
 
-func Test_InfixS(t *testing.T) {
+func TestInfixS(t *testing.T) {
 
 	decomp := NewDecompounder()
 	decomp.AddPrefix("finland")
@@ -453,7 +453,7 @@ func Test_InfixS(t *testing.T) {
 
 }
 
-func Test_LodFromFile(t *testing.T) {
+func TestLodFromFile(t *testing.T) {
 	d, err := NewDecompounderFromFile("test_word_parts.txt")
 	if err != nil {
 		t.Errorf("%v", err)

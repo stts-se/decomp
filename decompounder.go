@@ -28,7 +28,8 @@ type tNode struct {
 	leaf bool
 }
 
-func NewtNode() *tNode {
+// newtNode initialises and returns a tNode
+func newtNode() *tNode {
 	return &tNode{sons: make(map[rune]*tNode)}
 }
 
@@ -54,7 +55,7 @@ func (t *tNode) add(s string) *tNode {
 		son.add(s[l:])
 
 	} else { // new path
-		son := NewtNode()
+		son := newtNode()
 		son.r = r
 		if utf8.RuneCountInString(s) == 1 {
 			son.leaf = true
@@ -178,44 +179,44 @@ func (t *tNode) prefixes(s string) []arc {
 	return res
 }
 
-type PrefixTree struct {
+type prefixTree struct {
 	tree *tNode // TODO rename 'tree' to 'prefixes'?
 	// infixes are gluing parts that may appear once after a prefix
 	infixes *tNode
 }
 
-func NewPrefixTree() PrefixTree {
-	return PrefixTree{tree: NewtNode(), infixes: NewtNode()}
+func newPrefixTree() prefixTree {
+	return prefixTree{tree: newtNode(), infixes: newtNode()}
 }
 
-func (t PrefixTree) Add(s string) {
+func (t prefixTree) Add(s string) {
 	t.tree.add(s)
 }
-func (t PrefixTree) Remove(s string) bool {
+func (t prefixTree) Remove(s string) bool {
 	return t.tree.remove(s)
 }
-func (t PrefixTree) AddInfix(s string) {
+func (t prefixTree) AddInfix(s string) {
 	t.infixes.add(s)
 }
-func (t PrefixTree) RemoveInfix(s string) bool {
+func (t prefixTree) RemoveInfix(s string) bool {
 	return t.infixes.remove(s)
 }
 
-func (t PrefixTree) Prefixes(s string) []arc {
+func (t prefixTree) Prefixes(s string) []arc {
 	return t.tree.prefixes(s)
 }
 
-func (t PrefixTree) Infixes(s string) []arc {
+func (t prefixTree) Infixes(s string) []arc {
 	return t.infixes.prefixes(s)
 }
 
-func (t PrefixTree) RecursivePrefixes(s string) []arc {
+func (t prefixTree) RecursivePrefixes(s string) []arc {
 	var res []arc
 	t.recursivePrefixes(s, 0, len(s), &res)
 	return res
 }
 
-func (t PrefixTree) recursivePrefixes(s string, from, to int, as *[]arc) {
+func (t prefixTree) recursivePrefixes(s string, from, to int, as *[]arc) {
 
 	newAs := t.Prefixes(s[from:])
 
@@ -247,12 +248,12 @@ func (t PrefixTree) recursivePrefixes(s string, from, to int, as *[]arc) {
 	}
 }
 
-type SuffixTree struct {
+type suffixTree struct {
 	tree *tNode
 }
 
-func NewSuffixTree() SuffixTree {
-	return SuffixTree{tree: NewtNode()}
+func newSuffixTree() suffixTree {
+	return suffixTree{tree: newtNode()}
 }
 
 // Reverse returns its argument string reversed rune-wise left to right.
@@ -265,19 +266,19 @@ func reverse(s string) string {
 	return string(r)
 }
 
-func (t SuffixTree) Add(s string) {
+func (t suffixTree) Add(s string) {
 	r := reverse(s)
 	t.tree.add(r)
 }
 
-func (t SuffixTree) Remove(s string) bool {
+func (t suffixTree) Remove(s string) bool {
 	r := reverse(s)
 	return t.tree.remove(r)
 }
 
 // Suffixes returns the arc for suffixes of s in t. A suffix may not
 // span the complete s.
-func (t SuffixTree) Suffixes(s string) []arc {
+func (t suffixTree) Suffixes(s string) []arc {
 	r := reverse(s)
 
 	// the arcs going from right to left
@@ -294,16 +295,18 @@ func (t SuffixTree) Suffixes(s string) []arc {
 	return res
 }
 
+// Decompounder is a struct that holds potential word parts as 'prefixes' or 'suffixes'.
 type Decompounder struct {
-	prefixes    PrefixTree
-	suffixes    SuffixTree
+	prefixes    prefixTree
+	suffixes    suffixTree
 	tripleChars []rune // Chars that may be contracted into two
 	// when occurring at compound boundaries:
 	// 'natt'+'tåg' => 'nattåg'
 }
 
+// NewDecompounder returns a fresh instance of a Decompounder.
 func NewDecompounder() Decompounder {
-	return Decompounder{prefixes: NewPrefixTree(), suffixes: NewSuffixTree()}
+	return Decompounder{prefixes: newPrefixTree(), suffixes: newSuffixTree()}
 }
 
 func (d Decompounder) arcs(s string) []arc {
@@ -330,32 +333,47 @@ func (d Decompounder) arcs(s string) []arc {
 	return res
 }
 
+// AddPrefix adds a string that can function as a word part beginning a word.
 func (d Decompounder) AddPrefix(s string) {
 	d.prefixes.Add(s)
 }
+
+// RemovePrefix removes a string previously added by AddPrefix.
 func (d Decompounder) RemovePrefix(s string) bool {
 	return d.prefixes.Remove(s)
 }
+
+// ContainsPrefix returns true if s was previously added by AddPrefix.
 func (d Decompounder) ContainsPrefix(s string) bool {
 	return d.prefixes.tree.contains(s)
 }
 
+// AddInfix adds a string that can function as an infix between two word parts.
 func (d Decompounder) AddInfix(s string) {
 	d.prefixes.AddInfix(s)
 }
+
+// RemoveInfix removes an infix added by AddInfix.
 func (d Decompounder) RemoveInfix(s string) bool {
 	return d.prefixes.RemoveInfix(s)
 }
+
+// ContainsInfix returns true if s was previously added by AddInfix.
 func (d Decompounder) ContainsInfix(s string) bool {
 	return d.prefixes.infixes.contains(s)
 }
 
+// AddSuffix adds a string that can function as a word part ending a word.
 func (d Decompounder) AddSuffix(s string) {
 	d.suffixes.Add(s)
 }
+
+// RemoveSuffix removes a string previously added by AddSuffix.
 func (d Decompounder) RemoveSuffix(s string) bool {
 	return d.suffixes.Remove(s)
 }
+
+// ContainsSuffix returns true if s was previously added by AddSuffix.
 func (d Decompounder) ContainsSuffix(s string) bool {
 	return d.suffixes.tree.contains(reverse(s))
 }
@@ -387,6 +405,7 @@ func (d Decompounder) List() []string {
 	return res
 }
 
+// SaveToFile saved the current state of Decompounder to text file fName.
 func (d Decompounder) SaveToFile(fName string) error {
 	var fh *os.File
 	var err error
@@ -522,7 +541,7 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 	return res, err
 }
 
-// sorting [][]string according to length
+// ByLen sorts [][]string according to length
 type ByLen [][]string
 
 func (b ByLen) Len() int {
@@ -537,6 +556,7 @@ func (b ByLen) Less(i, j int) bool {
 	return len(b[i]) < len(b[j])
 }
 
+// Decomp tries to find potential sequences of word parts in s.
 func (d Decompounder) Decomp(s string) [][]string {
 	var res [][]string
 
