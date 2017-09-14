@@ -155,7 +155,7 @@ type arc struct {
 	start int
 	end   int
 	cat   arcType // used to eliminate unwanted sequences of arcs
-	//strn  string  // The actual string is needed on order to handle tripple consonant compounds
+	strn  string  // The actual string is needed on order to handle tripple consonant compounds
 }
 
 // Returns the matching prefix substrings of s that exist in t in the
@@ -557,12 +557,25 @@ func (b ByLen) Less(i, j int) bool {
 	return len(b[i]) < len(b[j])
 }
 
+// Updates second argument in-place, adding the substring covered by the arc to the arc.strn field
+func addSubstrings(s string, arcs []arc) {
+	for i, a := range arcs {
+		//TODO check that this works, with index into string. Only words for ASCII strings?
+		// s[a.start:a.end] <-- This OK?
+		a.strn = string([]rune(s)[a.start:a.end]) // Unnecessary convertions?
+		arcs[i] = a
+	}
+}
+
 // Decomp tries to find potential sequences of word parts in s.
 func (d Decompounder) Decomp(s string) [][]string {
 	var res [][]string
 
 	arcs := d.arcs(s)
 	// TODO: Add the (sub)strings to arcs, in order to handle tripple consonant compounds
+	fmt.Printf("%v\n", arcs)
+	addSubstrings(s, arcs)
+	fmt.Printf("%v\n\n", arcs)
 	paths := paths(arcs, 0, len(s))
 
 	for _, p := range paths {
