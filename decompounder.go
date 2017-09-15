@@ -213,7 +213,7 @@ func (t prefixTree) Infixes(s string) []arc {
 
 func (t prefixTree) RecursivePrefixes(s string) []arc {
 	var res []arc
-	t.recursivePrefixes(s, 0, len(s), &res)
+	t.recursivePrefixes(s, 0, utf8.RuneCountInString(s), &res)
 	return res
 }
 
@@ -300,21 +300,31 @@ func (t suffixTree) Suffixes(s string) []arc {
 type Decompounder struct {
 	prefixes    prefixTree
 	suffixes    suffixTree
-	tripleChars []rune // Chars that may be contracted into two
+	tripleChars map[rune]bool // Chars that may be contracted into two
 	// when occurring at compound boundaries:
 	// 'natt'+'tåg' => 'nattåg'
 }
 
 // NewDecompounder returns a fresh instance of a Decompounder.
 func NewDecompounder() Decompounder {
-	return Decompounder{prefixes: newPrefixTree(), suffixes: newSuffixTree()}
+	return Decompounder{prefixes: newPrefixTree(), suffixes: newSuffixTree(), tripleChars: make(map[rune]bool)}
 }
 
 func (d Decompounder) arcs(s string) []arc {
 	var res []arc
 
 	res0 := append(res, d.prefixes.RecursivePrefixes(s)...)
+	// fmt.Printf("PREFIX ARCS: %#v\n", res0)
+
+	// for _, a := range res0 {
+	// 	fmt.Printf("arc: %#v : %s\n", a, s[a.start:a.end])
+	// }
+
 	res1 := append(res, d.suffixes.Suffixes(s)...)
+	// fmt.Printf("SUFFFIX ARCS: %#v\n", res1)
+	// for _, a := range res1 {
+	// 	fmt.Printf("arc: %#v : %s\n", a, s[a.start:a.end])
+	// }
 
 	// ensure no duplicate arcs
 	found := make(map[arc]bool)
@@ -329,6 +339,11 @@ func (d Decompounder) arcs(s string) []arc {
 			res = append(res, a)
 			found[a] = true
 		}
+	}
+
+	// add the actual substrings
+	for i, a := range res {
+		res[i].strn = s[a.start:a.end]
 	}
 
 	return res
@@ -572,11 +587,11 @@ func (d Decompounder) Decomp(s string) [][]string {
 	var res [][]string
 
 	arcs := d.arcs(s)
-	// TODO: Add the (sub)strings to arcs, in order to handle tripple consonant compounds
-	fmt.Printf("%v\n", arcs)
-	addSubstrings(s, arcs)
-	fmt.Printf("%v\n\n", arcs)
-	paths := paths(arcs, 0, len(s))
+
+	// TODO: I don't get why it works taking the length of the
+	// string, but not counting the runes.  Seems to be some
+	// subtle bug here (or above):
+	paths := paths(arcs, 0, len(s)) //utf8.RuneCountInString(s))
 
 	for _, p := range paths {
 		res = append(res, pathToDecomp(p, s))

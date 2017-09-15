@@ -215,6 +215,7 @@ func TestDecompounder(t *testing.T) {
 	d.AddSuffix("tjärn")
 
 	decomps := d.Decomp("syltjärn")
+	fmt.Printf("FANTASTIC PLASTIC: %#v\n\n", decomps)
 	if w, g := 2, len(decomps); w != g {
 		t.Errorf(ts, w, g)
 	}
@@ -225,6 +226,7 @@ func TestDecompounder(t *testing.T) {
 		t.Errorf(ts, w, g)
 	}
 
+	// both first comp-parts:
 	p1 := decomps[0][0]
 	p2 := decomps[1][0]
 
@@ -237,6 +239,16 @@ func TestDecompounder(t *testing.T) {
 	}
 	if p1 != "sylt" && p2 != "sylt" {
 		t.Error("Aouch")
+	}
+
+	// both last comp-parts:
+	p3 := decomps[0][1]
+	p4 := decomps[1][1]
+	if p3 != "järn" && p3 != "tjärn" {
+		t.Error("Gosh: " + p3)
+	}
+	if p4 != "järn" && p4 != "tjärn" {
+		t.Error("Gosh: " + p4)
 	}
 }
 
@@ -409,6 +421,27 @@ func TestLenSort(t *testing.T) {
 
 }
 
+// func TestTripleCons(t *testing.T) {
+
+// 	decomp := NewDecompounder()
+// 	//decomp.tripleChars['t'] = true
+// 	decomp.AddPrefix("natt")
+// 	decomp.AddSuffix("tåg")
+
+// 	ds0 := decomp.Decomp("natttåg")
+// 	//fmt.Printf("%v\n", ds0)
+// 	if w, g := 1, len(ds0); w != g {
+// 		t.Errorf(ts, w, g)
+// 	}
+
+// 	ds1 := decomp.Decomp("nattåg")
+// 	//fmt.Printf("%v\n", ds1)
+// 	if w, g := 1, len(ds1); w != g {
+// 		t.Errorf(ts, w, g)
+// 	}
+
+// }
+
 func TestInfixS(t *testing.T) {
 
 	decomp := NewDecompounder()
@@ -420,6 +453,12 @@ func TestInfixS(t *testing.T) {
 		t.Errorf(ts, w, g)
 	}
 	if w, g := 2, len(ds1[0]); w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "finland", ds1[0][0]; w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "båt", ds1[0][1]; w != g {
 		t.Errorf(ts, w, g)
 	}
 
@@ -448,6 +487,10 @@ func TestInfixS(t *testing.T) {
 
 	ds3 := decomp.Decomp("finlandsbåtskapten")
 	if w, g := 1, len(ds3); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := "kapten", ds3[0][4]; w != g {
 		t.Errorf(ts, w, g)
 	}
 
@@ -480,5 +523,4 @@ func TestLoadFromFile(t *testing.T) {
 	if errf != nil {
 		t.Errorf("%v", errf)
 	}
-
 }
