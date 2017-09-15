@@ -349,6 +349,62 @@ func (d Decompounder) arcs(s string) []arc {
 	return res
 }
 
+type endChar struct {
+	i int
+	r rune
+}
+
+func genTripleConsonantArcs(s string, tripleChars map[rune]bool, arcs []arc) []arc {
+	var res []arc
+
+	//fmt.Printf("EN APA: %v\n", arcs)
+
+	// Add new arcs for pairs of overlapping arcs where the
+	// left arc ends in two tripleChars and the right arc starts
+	// with the same letter. The overlap should be one character (a1.end-1 == a2.from)
+
+	//var finalDoubleCons []arc
+
+	// These structs contain the arcs ending in double chars (if defined in tripleChars)
+	endCharsAt := make(map[endChar][]arc)
+
+	// This loop collects all arcs ending in double letters that are defined in tripleChars
+	for _, a := range arcs {
+		if utf8.RuneCountInString(a.strn) < 3 {
+			continue
+		}
+
+		r := []rune(a.strn)
+		last := r[len(r)-1]
+		lastButOne := r[len(r)-2]
+
+		if !tripleChars[last] || last != lastButOne {
+			continue
+		}
+
+		ec := endChar{i: a.end, r: last}
+		endCharsAt[ec] = append(endCharsAt[ec], a)
+	}
+
+	//fmt.Printf("FILUR: %#v\n", endCharsAt)
+
+	// This loop looks for overlapping arcs starting with the same chars that ends arc in encCharAt
+	for _, a := range arcs {
+		r, l := utf8.DecodeRuneInString(a.strn)
+		i := a.start
+		ec := endChar{i: i + l, r: r}
+		//fmt.Printf("GLUGG: %#v\n", ec)
+		if arcz, ok := endCharsAt[ec]; ok {
+			for _, a0 := range arcz {
+				// for each overlapping pair of arcs, add a new first arc that ends one char from the end of the string
+				res = append(res, arc{start: a0.start, end: a0.end - l, strn: a0.strn})
+			}
+		}
+	}
+
+	return res
+}
+
 // AddPrefix adds a string that can function as a word part beginning a word.
 func (d Decompounder) AddPrefix(s string) {
 	d.prefixes.Add(s)
@@ -572,26 +628,17 @@ func (b ByLen) Less(i, j int) bool {
 	return len(b[i]) < len(b[j])
 }
 
-// Updates second argument in-place, adding the substring covered by the arc to the arc.strn field
-func addSubstrings(s string, arcs []arc) {
-	for i, a := range arcs {
-		//TODO check that this works, with index into string. Only words for ASCII strings?
-		// s[a.start:a.end] <-- This OK?
-		a.strn = string([]rune(s)[a.start:a.end]) // Unnecessary convertions?
-		arcs[i] = a
-	}
-}
-
 // Decomp tries to find potential sequences of word parts in s.
 func (d Decompounder) Decomp(s string) [][]string {
 	var res [][]string
 
 	arcs := d.arcs(s)
+	//fmt.Printf("arcs: %#v\n", arcs)
+	newArcs := genTripleConsonantArcs(s, d.tripleChars, arcs)
+	//fmt.Printf("newArcs: %#v\n", newArcs)
+	arcs = append(arcs, newArcs...)
 
-	// TODO: I don't get why it works taking the length of the
-	// string, but not counting the runes.  Seems to be some
-	// subtle bug here (or above):
-	paths := paths(arcs, 0, len(s)) //utf8.RuneCountInString(s))
+	paths := paths(arcs, 0, len(s))
 
 	for _, p := range paths {
 		res = append(res, pathToDecomp(p, s))
@@ -599,10 +646,6 @@ func (d Decompounder) Decomp(s string) [][]string {
 
 	sort.Sort(ByLen(res))
 	return res
-}
-
-func punk() {
-	fmt.Println()
 }
 
 func paths(as []arc, from, to int) [][]arc {
@@ -665,7 +708,7 @@ func pathToDecomp(p []arc, s string) []string {
 	var res []string
 	// TODO error checking
 	for _, a := range p {
-		s0 := s[a.start:a.end] // Does this work with non-ASCII characters?
+		s0 := a.strn
 		res = append(res, s0)
 	}
 	return res

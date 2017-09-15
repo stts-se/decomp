@@ -215,7 +215,7 @@ func TestDecompounder(t *testing.T) {
 	d.AddSuffix("tjärn")
 
 	decomps := d.Decomp("syltjärn")
-	fmt.Printf("FANTASTIC PLASTIC: %#v\n\n", decomps)
+	//fmt.Printf("FANTASTIC PLASTIC: %#v\n\n", decomps)
 	if w, g := 2, len(decomps); w != g {
 		t.Errorf(ts, w, g)
 	}
@@ -421,26 +421,66 @@ func TestLenSort(t *testing.T) {
 
 }
 
-// func TestTripleCons(t *testing.T) {
+func TestTripleCons(t *testing.T) {
 
-// 	decomp := NewDecompounder()
-// 	//decomp.tripleChars['t'] = true
-// 	decomp.AddPrefix("natt")
-// 	decomp.AddSuffix("tåg")
+	decomp := NewDecompounder()
+	decomp.tripleChars['t'] = true
+	decomp.AddPrefix("natt")
+	decomp.AddSuffix("tåg")
 
-// 	ds0 := decomp.Decomp("natttåg")
-// 	//fmt.Printf("%v\n", ds0)
-// 	if w, g := 1, len(ds0); w != g {
-// 		t.Errorf(ts, w, g)
-// 	}
+	ds0 := decomp.Decomp("natttåg")
+	//fmt.Printf("%v\n", ds0)
+	if w, g := 1, len(ds0); w != g {
+		t.Errorf(ts, w, g)
+	}
 
-// 	ds1 := decomp.Decomp("nattåg")
-// 	//fmt.Printf("%v\n", ds1)
-// 	if w, g := 1, len(ds1); w != g {
-// 		t.Errorf(ts, w, g)
-// 	}
+	ds1 := decomp.Decomp("nattåg")
+	//fmt.Printf("%v\n", ds1)
+	if w, g := 1, len(ds1); w != g {
+		t.Errorf(ts, w, g)
+	}
 
-// }
+	decomp.AddPrefix("glass")
+	decomp.AddSuffix("strut")
+	decomp.tripleChars['s'] = true
+	ds2 := decomp.Decomp("glasstrut")
+	if w, g := 1, len(ds2); w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "glass", ds2[0][0]; w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "strut", ds2[0][1]; w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	decomp.AddPrefix("glas")
+	decomp.AddSuffix("trut")
+	ds3 := decomp.Decomp("glasstrut")
+	//fmt.Printf(">>> %#v\n", ds3)
+
+	if w, g := 3, len(ds3); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	var glasStrut bool
+	var glassTrut bool
+	var glassStrut bool
+	for _, d := range ds3 {
+		if d[0] == "glas" && d[1] == "strut" {
+			glasStrut = true
+		}
+		if d[0] == "glass" && d[1] == "trut" {
+			glassTrut = true
+		}
+		if d[0] == "glass" && d[1] == "strut" {
+			glassStrut = true
+		}
+	}
+	if !(glasStrut && glassTrut && glassStrut) {
+		t.Errorf("failure of enormous proportions")
+	}
+}
 
 func TestInfixS(t *testing.T) {
 
