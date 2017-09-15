@@ -424,7 +424,7 @@ func TestLenSort(t *testing.T) {
 func TestTripleCons(t *testing.T) {
 
 	decomp := NewDecompounder()
-	decomp.tripleChars['t'] = true
+	decomp.AllowedTripleChars([]rune{'t'})
 	decomp.AddPrefix("natt")
 	decomp.AddSuffix("tåg")
 
@@ -454,7 +454,7 @@ func TestTripleCons(t *testing.T) {
 
 	decomp.AddPrefix("glass")
 	decomp.AddSuffix("strut")
-	decomp.tripleChars['s'] = true
+	decomp.AllowedTripleChars([]rune{'s', 't'})
 	ds2 := decomp.Decomp("glasstrut")
 	if w, g := 1, len(ds2); w != g {
 		t.Errorf(ts, w, g)

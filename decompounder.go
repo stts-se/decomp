@@ -310,6 +310,15 @@ func NewDecompounder() Decompounder {
 	return Decompounder{prefixes: newPrefixTree(), suffixes: newSuffixTree(), tripleChars: make(map[rune]bool)}
 }
 
+// AllowedTripleChars defines what characters that can be reduced when
+// appearing in triples over compound boundaries. An example where 't'
+// is an allowed triple consonats: 'nattåg' -> 'natt'+'tåg'.
+func (d Decompounder) AllowedTripleChars(r []rune) {
+	for _, r0 := range r {
+		d.tripleChars[r0] = true
+	}
+}
+
 func (d Decompounder) arcs(s string) []arc {
 	var res []arc
 
