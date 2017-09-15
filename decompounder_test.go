@@ -433,10 +433,22 @@ func TestTripleCons(t *testing.T) {
 	if w, g := 1, len(ds0); w != g {
 		t.Errorf(ts, w, g)
 	}
+	if w, g := "natt", ds0[0][0]; w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "tåg", ds0[0][1]; w != g {
+		t.Errorf(ts, w, g)
+	}
 
 	ds1 := decomp.Decomp("nattåg")
 	//fmt.Printf("%v\n", ds1)
 	if w, g := 1, len(ds1); w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "natt", ds1[0][0]; w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := "tåg", ds1[0][1]; w != g {
 		t.Errorf(ts, w, g)
 	}
 
