@@ -459,8 +459,8 @@ func (d Decompounder) ContainsSuffix(s string) bool {
 	return d.suffixes.tree.contains(reverse(s))
 }
 
-//TODO Strings below ("PREFIX", "SUFFIX"...) could be put into
-//variables (constants) to minimize risk of faulty spellings
+// Er... the odd spelling was to signal that these are constants, but that they should not be exported (lower case cap)
+const aLLOWEDtRIPLEcHARS, sUFFIX, pREFIX, iNFIX, rEMOVE string = "ALLOWED_TRIPLE_CHARS", "SUFFIX", "PREFIX", "INFIX", "REMOVE"
 
 // List returns all wordparts of Decompounder prefixed with type,
 // PREFIX:, INFIX: or SUFFIX:.  The strings of the different types are
@@ -475,26 +475,26 @@ func (d Decompounder) List() []string {
 	}
 
 	if len(triples) > 0 {
-		t := "ALLOWED_TRIPLE_CHARS:" + string(triples)
+		t := aLLOWEDtRIPLEcHARS + ":" + string(triples)
 		res = append(res, t)
 	}
 
 	ps := d.prefixes.tree.list()
 	sort.Strings(ps)
 	for _, p := range ps {
-		res = append(res, "PREFIX:"+p)
+		res = append(res, pREFIX+":"+p)
 	}
 
 	is := d.prefixes.infixes.list()
 	sort.Strings(is)
 	for _, i := range is {
-		res = append(res, "INFIX:"+i)
+		res = append(res, iNFIX+":"+i)
 	}
 
 	ss := d.suffixes.tree.list()
 	sort.Strings(ss)
 	for _, s := range ss {
-		res = append(res, "SUFFIX:"+reverse(s))
+		res = append(res, sUFFIX+":"+reverse(s))
 	}
 
 	return res
@@ -524,6 +524,7 @@ func (d Decompounder) SaveToFile(fName string) error {
 }
 
 // NewDecompounderFromFile initializes a Decompounder from a text file of the following format:
+// (ALLOWED_TRIPLE_CHARS:<character sequence>)?
 //(REMOVE:)?<PREFIX|INFIX|SUFFIX>:<lower-case string>
 //
 // The optional REMOVE: command is used as a simple means to remove an entry,
@@ -565,23 +566,31 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 			continue
 		}
 
-		if fs[0] == "REMOVE" {
+		if fs[0] == rEMOVE {
 			fsRem := strings.SplitN(fs[1], ":", 2)
 
 			switch fsRem[0] {
-			case "PREFIX":
+			//TODO this one has not yet been tested
+			case aLLOWEDtRIPLEcHARS:
+
+				tc := strings.Replace(strings.TrimSpace(fsRem[1]), " ", "", -1)
+				for _, c := range tc {
+					delete(res.tripleChars, c)
+				}
+
+			case pREFIX:
 
 				if res.RemovePrefix(strings.ToLower(fsRem[1])) {
 					linesRemoved++
 				}
 
-			case "INFIX":
+			case iNFIX:
 
 				if res.RemoveInfix(strings.ToLower(fsRem[1])) {
 					linesRemoved++
 				}
 
-			case "SUFFIX":
+			case sUFFIX:
 
 				if res.RemoveSuffix(strings.ToLower(fsRem[1])) {
 					linesRemoved++
@@ -597,7 +606,7 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 		}
 
 		// This check should not be needed? Covered by default below?
-		if fs[0] != "ALLOWED_TRIPLE_CHARS" && fs[0] != "PREFIX" && fs[0] != "INFIX" && fs[0] != "SUFFIX" {
+		if fs[0] != aLLOWEDtRIPLEcHARS && fs[0] != pREFIX && fs[0] != iNFIX && fs[0] != sUFFIX {
 			//err = fmt.Errorf("invalid line skipped: %s", l)
 			fmt.Fprintf(os.Stderr, "invalid line skipped: %s\n", l)
 			linesSkipped++
@@ -605,16 +614,16 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 		}
 
 		switch fs[0] {
-		case "ALLOWED_TRIPLE_CHARS":
+		case aLLOWEDtRIPLEcHARS:
 			tc := strings.Replace(strings.TrimSpace(fs[1]), " ", "", -1)
 			res.AllowedTripleChars([]rune(tc))
-		case "PREFIX":
+		case pREFIX:
 			res.AddPrefix(strings.ToLower(fs[1]))
 			linesAdded++
-		case "INFIX":
+		case iNFIX:
 			res.AddInfix(strings.ToLower(fs[1]))
 			linesAdded++
-		case "SUFFIX":
+		case sUFFIX:
 			res.AddSuffix(strings.ToLower(fs[1]))
 			linesAdded++
 		default:
