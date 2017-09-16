@@ -554,6 +554,17 @@ func TestLoadFromFile(t *testing.T) {
 		t.Errorf("%v", err)
 	}
 
+	if w, g := 2, len(d.tripleChars); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := true, d.tripleChars['s']; w != g {
+		t.Errorf(ts, w, g)
+	}
+	if w, g := true, d.tripleChars['t']; w != g {
+		t.Errorf(ts, w, g)
+	}
+
 	res1 := d.Decomp("grusvägarna")
 	// One suggesting only
 	if w, g := 1, len(res1); w != g {

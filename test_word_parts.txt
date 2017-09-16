@@ -1,5 +1,6 @@
 # Skip this line, and the next, empty one
 
+ALLOWED_TRIPLE_CHARS:st
 PREFIX:stor
 PREFIX:grus
 INFIX:grus

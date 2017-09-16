@@ -10,11 +10,9 @@ import (
 )
 
 // TODO:
-// remove
 // compute freqs
 // completion?
 // bestGuess (heuristics)
-// Handling tripple consonats clusters merged into two consonants in compounds ('natt+tåg' -> 'nattåg')
 
 // TNode is kind of a trie-structure representing strings (words).
 // A path trough the TNode that ends with leaf = true represents a
@@ -379,6 +377,7 @@ func genTripleConsonantArcs(s string, tripleChars map[rune]bool, arcs []arc) []a
 
 	// This loop collects all arcs ending in double letters that are defined in tripleChars
 	for _, a := range arcs {
+		// Strings of two characters are illegal first words of overlapping compounds
 		if utf8.RuneCountInString(a.strn) < 3 {
 			continue
 		}
@@ -395,14 +394,15 @@ func genTripleConsonantArcs(s string, tripleChars map[rune]bool, arcs []arc) []a
 		endCharsAt[ec] = append(endCharsAt[ec], a)
 	}
 
-	//fmt.Printf("FILUR: %#v\n", endCharsAt)
-
 	// This loop looks for overlapping arcs starting with the same chars that ends arc in encCharAt
 	for _, a := range arcs {
+		// Single characters strings are not legal second words in overlapping compounds
+		if utf8.RuneCountInString(a.strn) < 2 {
+			continue
+		}
 		r, l := utf8.DecodeRuneInString(a.strn)
 		i := a.start
-		ec := endChar{i: i + l, r: r}
-		//fmt.Printf("GLUGG: %#v\n", ec)
+		ec := endChar{i: i + l, r: r} // overlapping arcs with the same character r?
 		if arcz, ok := endCharsAt[ec]; ok {
 			for _, a0 := range arcz {
 				// for each overlapping pair of arcs, add a new first arc that ends one char from the end of the string
@@ -459,12 +459,26 @@ func (d Decompounder) ContainsSuffix(s string) bool {
 	return d.suffixes.tree.contains(reverse(s))
 }
 
+//TODO Strings below ("PREFIX", "SUFFIX"...) could be put into
+//variables (constants) to minimize risk of faulty spellings
+
 // List returns all wordparts of Decompounder prefixed with type,
 // PREFIX:, INFIX: or SUFFIX:.  The strings of the different types are
 // sorted alphabetically for each category. This ordering is probably
 // different from the original insert order.
 func (d Decompounder) List() []string {
 	var res []string
+
+	var triples []rune
+	for k, _ := range d.tripleChars {
+		triples = append(triples, k)
+	}
+
+	if len(triples) > 0 {
+		t := "ALLOWED_TRIPLE_CHARS:" + string(triples)
+		res = append(res, t)
+	}
+
 	ps := d.prefixes.tree.list()
 	sort.Strings(ps)
 	for _, p := range ps {
@@ -582,7 +596,8 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 			continue // REMOVE
 		}
 
-		if fs[0] != "PREFIX" && fs[0] != "INFIX" && fs[0] != "SUFFIX" {
+		// This check should not be needed? Covered by default below?
+		if fs[0] != "ALLOWED_TRIPLE_CHARS" && fs[0] != "PREFIX" && fs[0] != "INFIX" && fs[0] != "SUFFIX" {
 			//err = fmt.Errorf("invalid line skipped: %s", l)
 			fmt.Fprintf(os.Stderr, "invalid line skipped: %s\n", l)
 			linesSkipped++
@@ -590,6 +605,9 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 		}
 
 		switch fs[0] {
+		case "ALLOWED_TRIPLE_CHARS":
+			tc := strings.Replace(strings.TrimSpace(fs[1]), " ", "", -1)
+			res.AllowedTripleChars([]rune(tc))
 		case "PREFIX":
 			res.AddPrefix(strings.ToLower(fs[1]))
 			linesAdded++
