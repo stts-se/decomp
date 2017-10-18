@@ -287,6 +287,11 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, strings.Join(walkedURLs, "\n"))
 }
 
+func ping(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Fprintf(w, "decompserver\n")
+}
+
 var walkedURLs = []string{}
 
 func main() {
@@ -334,6 +339,7 @@ func main() {
 	r := mux.NewRouter().StrictSlash(true)
 
 	r.HandleFunc("/", mainHandler).Methods("get", "post")
+	r.HandleFunc("/ping", ping).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
 	r.HandleFunc("/decomp/list_decompers", listDecompers).Methods("get", "post")
 	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")                   //, "post")
