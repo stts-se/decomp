@@ -9,8 +9,8 @@ go run
 
 Command line
 
-go run cmd/decomper/decomper.go
-decomper <DECOMP FILE> <words...>|<STDIN>
+ go run cmd/decomper/decomper.go
+ decomper <DECOMP FILE> <words...>|<STDIN>
 
 go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink \
 Lines read: 41887
