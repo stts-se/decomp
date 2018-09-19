@@ -12,12 +12,12 @@ Command line
  `go run cmd/decomper/decomper.go
  decomper <DECOMP FILE> <words...>|<STDIN>`
 
-```go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink
+`go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink
  Lines read: 41887
  Lines skipped: 0
  Lines added: 41887
  Lines removed: 0
- zebrafink	zebra+fink```
+ zebrafink	zebra+fink`
 
 HTTP Server
 
