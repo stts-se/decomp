@@ -9,34 +9,34 @@ go run
 
 Command line
 
- go run cmd/decomper/decomper.go
- decomper <DECOMP FILE> <words...>|<STDIN>
+ `go run cmd/decomper/decomper.go
+ decomper <DECOMP FILE> <words...>|<STDIN>`
 
-go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink \
+`go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink
 Lines read: 41887
 Lines skipped: 0
 Lines added: 41887
 Lines removed: 0
-zebrafink	zebra+fink
+zebrafink	zebra+fink`
 
 HTTP Server
 
-go run decompserver/decompserver.go 
-decompserver <DECOMPFILES DIR>
+`go run decompserver/decompserver.go 
+decompserver <DECOMPFILES DIR>`
 
-go run decompserver/decompserver.go decompserver/decomp_files/
+`go run decompserver/decompserver.go decompserver/decomp_files/
 Lines read: 41887
 Lines skipped: 0
 Lines added: 41887
 Lines removed: 0
 decomper: loaded file 'decompserver/decomp_files/sv_nst.txt'
-2018/09/19 21:04:05 starting decomp server at port :6778
+2018/09/19 21:04:05 starting decomp server at port :6778`
 
 
 
 Go to localhost:6778 to see the API calls:
 
-curl http://localhost:6778/
+`curl http://localhost:6778/
 /
 /ping
 /decomp
@@ -51,7 +51,7 @@ curl http://localhost:6778/decomp/list_decompers
 ["sv_nst"]
 
 curl http://localhost:6778/decomp/sv_nst/zebrafinkar
-[{"parts":["zebra","finkar"]}]
+[{"parts":["zebra","finkar"]}]`
 
 
 
