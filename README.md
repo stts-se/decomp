@@ -1,7 +1,8 @@
 # decomp
 decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
-Clone repo.
+Clone repo, then
+
     cd decomp
     go get ./...
     go test
