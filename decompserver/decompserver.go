@@ -66,6 +66,10 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 	// }
 
 	prefix := strings.ToLower(vars["prefix"])
+	if prefix == "" {
+		return
+	}
+
 	// if "" == prefix {
 	// 	msg := "no value for the expected 'prefix' parameter"
 	// 	log.Println(msg)
@@ -84,7 +88,7 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if decomper.decompers[decomperName].ContainsPrefix(prefix) {
-		fmt.Fprintf(w, "prefix already found: '%s'", prefix)
+		fmt.Fprintf(w, "prefix already found: '%s'\n", prefix)
 		return
 	}
 
@@ -97,7 +101,7 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "added '%s'", prefix)
+	fmt.Fprintf(w, "added '%s'\n", prefix)
 }
 
 // TODO cut-and-paste of addPrefix
@@ -107,6 +111,10 @@ func removePrefix(w http.ResponseWriter, r *http.Request) {
 	decomperName := vars["decomper_name"]
 
 	prefix := vars["prefix"]
+	if prefix == "" {
+		return
+	}
+
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
 	fn, ok := decomper.files[decomperName]
@@ -119,7 +127,7 @@ func removePrefix(w http.ResponseWriter, r *http.Request) {
 
 	//writeToWordPartsFile("PREFIX")
 	if !decomper.decompers[decomperName].ContainsPrefix(prefix) {
-		fmt.Fprintf(w, "prefix not found: '%s'", prefix)
+		fmt.Fprintf(w, "prefix not found: '%s'\n", prefix)
 		return
 	}
 	decomper.decompers[decomperName].RemovePrefix(prefix)
@@ -131,7 +139,7 @@ func removePrefix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "removed prefix: '%s'", prefix)
+	fmt.Fprintf(w, "removed prefix: '%s'\n", prefix)
 }
 
 func addSuffix(w http.ResponseWriter, r *http.Request) {
@@ -139,7 +147,10 @@ func addSuffix(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	decomperName := vars["decomper_name"]
-	suffix := vars["suffix"]
+	suffix := strings.ToLower(vars["suffix"])
+	if suffix == "" {
+		return
+	}
 
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
@@ -152,7 +163,7 @@ func addSuffix(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if decomper.decompers[decomperName].ContainsSuffix(suffix) {
-		fmt.Fprintf(w, "sufffix already found: '%s'", suffix)
+		fmt.Fprintf(w, "sufffix already found: '%s'\n", suffix)
 		return
 	}
 
@@ -165,7 +176,7 @@ func addSuffix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "added '%s'", suffix)
+	fmt.Fprintf(w, "added '%s'\n", suffix)
 }
 
 // TODO cut-and-paste of addSuffix
@@ -175,6 +186,10 @@ func removeSuffix(w http.ResponseWriter, r *http.Request) {
 
 	decomperName := vars["decomper_name"]
 	suffix := vars["suffix"]
+
+	if suffix == "" {
+		return
+	}
 
 	decomper.mutex.Lock()
 	defer decomper.mutex.Unlock()
@@ -187,7 +202,7 @@ func removeSuffix(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !decomper.decompers[decomperName].ContainsSuffix(suffix) {
-		fmt.Fprintf(w, "suffix not found: '%s'", suffix)
+		fmt.Fprintf(w, "suffix not found: '%s'\n", suffix)
 		return
 	}
 	decomper.decompers[decomperName].RemoveSuffix(suffix)
@@ -199,7 +214,7 @@ func removeSuffix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "removed '%s'", suffix)
+	fmt.Fprintf(w, "removed '%s'\n", suffix)
 }
 
 type decomps struct {
@@ -245,6 +260,12 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 	log.Println(res)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+
+	if len(res) == 0 {
+		fmt.Fprintf(w, "[]\n")
+		return
+	}
+
 	j, err := json.Marshal(res)
 	if err != nil {
 		msg := fmt.Sprintf("failed json marshalling : %v", err)
@@ -252,7 +273,8 @@ func decompWord(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, msg, http.StatusInternalServerError)
 		return
 	}
-	fmt.Fprintf(w, string(j))
+
+	fmt.Fprintf(w, "%s\n", string(j))
 }
 
 func listDecompers(w http.ResponseWriter, r *http.Request) {
@@ -272,19 +294,19 @@ func listDecompers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, msg, http.StatusInternalServerError)
 		return
 	}
-	fmt.Fprintf(w, string(j))
+	fmt.Fprintf(w, "%s\n", string(j))
 }
 
 func decompMain(w http.ResponseWriter, r *http.Request) {
 	// TODO error if file not found
 	//http.ServeFile(w, r, "./src/decomp_demo.html")
 	fmt.Printf("decompMain: PENDING")
-	fmt.Fprintf(w, "%s", "TO DO")
+	fmt.Fprintf(w, "%s\n", "TO DO")
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Fprintf(w, strings.Join(walkedURLs, "\n"))
+	fmt.Fprintf(w, "%s\n", strings.Join(walkedURLs, "\n"))
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
