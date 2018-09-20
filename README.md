@@ -49,7 +49,7 @@ Go to localhost:6778 to see the API calls:
     /decomp/{decomper_name}/remove_suffix/{suffix}
 
     curl http://localhost:6778/decomp/list_decompers
-    ["sv_nst"]
+    ["nob_nst","sv_nst"]
 
     curl http://localhost:6778/decomp/sv_nst/zebrafinkar
     [{"parts":["zebra","finkar"]}]
