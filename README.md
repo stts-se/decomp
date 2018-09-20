@@ -2,10 +2,10 @@
 decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
 Clone repo.
-cd decomp
-go get ./...
-go test
-go run 
+    cd decomp
+    go get ./...
+    go test
+    
 
 Command line
 
