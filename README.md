@@ -21,7 +21,7 @@ Command line
     zebrafink	zebra+fink
 
 
-By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle compound boundaries where a double character has been assimilated, such as `natt+tåt -> nattåg`:
+By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle compound boundaries where a double character has been assimilated, such as `nattåg -> natt+tåg`:
 
     go run decomper.go ../../decompserver/decomp_files/sv_nst.txt nattåg
     Lines read: 41888
@@ -32,7 +32,7 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
 
 
 
-HTTP Server (must be started from its own directory in order for web demo page to work)
+HTTP Server (must be started from its own directory in order for web demo page to work, I think)
 
     cd decompserver/
 
