@@ -20,6 +20,18 @@ Command line
     Lines removed: 0
     zebrafink	zebra+fink
 
+
+By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle compound boundaries where a double character has been assimilated, such as `natt+tåt -> nattåg`:
+
+    go run decomper.go ../../decompserver/decomp_files/sv_nst.txt nattåg
+    Lines read: 41888
+    Lines skipped: 0
+    Lines added: 41887
+    Lines removed: 0
+    nattåg	natt+tåg
+
+
+
 HTTP Server
 
     go run decompserver/decompserver.go 
