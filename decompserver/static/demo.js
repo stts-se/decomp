@@ -22,7 +22,7 @@ function runDecomp() {
     let select = document.getElementById("decomp_select");
     var decomper = select.options[select.selectedIndex].value;
     let decompURL = baseURL + "/decomp/" + encodeURIComponent(decomper) + "/" + encodeURIComponent(word);
-
+    
     console.log(decompURL);
     
     let xhr = new XMLHttpRequest();
@@ -35,9 +35,11 @@ function runDecomp() {
 		let res = xhr.responseText;
 		
 		document.getElementById("output").innerText = res;
-	    }
+	    } // TODO on error
 	}
     };
+    
+    
     
     xhr.send();
 }
