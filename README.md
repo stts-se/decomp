@@ -32,7 +32,9 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
 
 
 
-HTTP Server
+HTTP Server (must be started from its own directory in order for web demo page to work, I think)
+
+    cd decompserver/
 
     go run decompserver/decompserver.go 
     decompserver <DECOMPFILES DIR>
@@ -45,6 +47,8 @@ HTTP Server
     decomper: loaded file 'decompserver/decomp_files/sv_nst.txt'
     2018/09/19 21:04:05 starting decomp server at port :6778`
 
+
+Web demo at `http://localhost:6778/demo.html`
 
 
 Go to localhost:6778 to see the API calls:

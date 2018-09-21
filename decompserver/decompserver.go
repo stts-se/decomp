@@ -380,6 +380,8 @@ func main() {
 		return nil
 	})
 
+	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("static/"))))
+
 	port := ":6778"
 	log.Printf("starting decomp server at port %s\n", port)
 	err = http.ListenAndServe(port, r)
