@@ -1,9 +1,19 @@
 # decomp
 decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
+It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix. There may be a single linking character (these are defined in the compound part file using the INFIX tag) between compound parts.
+
+By using the ALLOWED_TRIPLE_CHARS tag, it's possible to enumerate a set of characters that may be collapsed into two, such as in `natt+tåg -> nattåg`. 
+See the top of `sv_nst.txt`.
+
 When there are several possible guesses for a word, all are presented in ascending order of number of word parts. Typically, guesses with the least number of word parts are better.
 
+
 Examples:
+
+    filmstjärna
+    film stjärna
+
 
     fiskeskär
 
@@ -26,11 +36,6 @@ Examples:
 TODO: Add a way to select between guesses of equal number of word parts. This might be possible to do using word part frequencies. 
 
 TODO: Better handle spurious linking characters, such as in  `glas s trut` and `glass s trut` above.
-
-It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix. There may be a single linking character (these are defined in the compound part file using the INFIX tag) between compound parts.
-
-By using the ALLOWED_TRIPLE_CHARS tag, it's possible to enumerate a set of characters that may be collapsed into two, such as in `natt+tåg -> nattåg`. 
-See the top of `sv_nst.txt`.
 
 
 To try it out, clone this repo, then
