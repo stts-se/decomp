@@ -1,3 +1,4 @@
+ALLOWED_TRIPLE_CHARS:ts
 INFIX:s
 PREFIX:samvær
 PREFIX:bibliofil
