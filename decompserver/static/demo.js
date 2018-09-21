@@ -37,7 +37,14 @@ function runDecomp() {
     xhr.onload = function(evt) {
 	if ( xhr.readyState === 4) {
      	    if (xhr.status === 200) {
-		let res = xhr.responseText;
+		let resp = xhr.responseText;
+		let respObj = JSON.parse(resp);
+		let res = "";
+		for (var i=0; i < respObj.length; i++) {
+		    //console.log("PARTS", resObj[i].parts);
+		    res += respObj[i].parts.join(" ") + "\n";
+		}
+
 		
 		document.getElementById("output").innerText = res;
 	    } // TODO on error
