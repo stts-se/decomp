@@ -1,6 +1,33 @@
 # decomp
 decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
+
+When there are several possible guesses for a word, all are presented in ascending order of number of word parts. Typically, guesses with the least number of word parts are better.
+
+Examples:
+
+    fiskeskär
+
+    fiske skär
+    fiske s kär
+
+(Above, the first guess is correct.)
+
+    glasstrut
+
+    glas strut
+    glass trut
+    glass strut
+    glas s trut
+    glass s trut
+
+(Above, all first three are possible, but the third one is the "correct" one.) 
+
+
+TODO: Add a way to select between guesses of equal number of word parts. This might be possible to do using word part frequencies. 
+
+TODO: Better handle spurious linking characters, such as in  `glas s trut` and `glass s trut` above.
+
 Clone repo, then
 
     cd decomp
