@@ -3,7 +3,11 @@
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
 
-There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.txt`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.txt`. You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server, see the HTTP API and web demo page described below.)
+There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.txt`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.txt`. 
+
+These files are generated from lexicon files published by [Språkbanken](https://www.nb.no/sprakbanken/). (Short as well as low frequent words parts have been left out from the generated files, however.)
+
+You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server for easily adding and removing word part, see the HTTP API and web demo page described below.)
 
 [Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
 
@@ -141,7 +145,7 @@ List the current decompers:
     ["nob_nst","sv_nst"]
 
 
-Try a decomper (sv_nst) and a word (zebrafinkar):
+Try a decomper (`sv_nst`) and a word (`zebrafinkar`):
 
     curl http://localhost:6778/decomp/sv_nst/zebrafinkar
     [{"parts":["zebra","finkar"]}]
