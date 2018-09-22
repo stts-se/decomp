@@ -546,6 +546,26 @@ func TestInfixS(t *testing.T) {
 		t.Errorf(ts, w, g)
 	}
 
+	// A prefix ending in linking character cannot be followed by that linking character
+	// glas+s+strut or glass+s+trut should not be generated
+	decomp.AddPrefix("glass")
+	decomp.AddPrefix("glas")
+	decomp.AddSuffix("strut")
+	decomp.AddSuffix("trut")
+	// glas+strut
+	// glass+trut
+	glassRes := decomp.Decomp("glasstrut")
+	if w, g := 2, len(glassRes); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	// Let's allow glass+strut
+	decomp.AllowedTripleChars([]rune{'s'})
+	glassRes = decomp.Decomp("glasstrut")
+	if w, g := 3, len(glassRes); w != g {
+		t.Errorf(ts, w, g)
+	}
+
 }
 
 func TestLoadFromFile(t *testing.T) {

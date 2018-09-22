@@ -153,7 +153,7 @@ type arc struct {
 	start int
 	end   int
 	cat   arcType // used to eliminate unwanted sequences of arcs
-	strn  string  // The actual string is needed on order to handle tripple consonant compounds
+	strn  string  // The actual string is needed in order to handle tripple consonant compounds
 }
 
 // Returns the matching prefix substrings of s that exist in t in the
@@ -731,6 +731,17 @@ func pathsAccu(as map[int][]arc, from, to int, currPath []arc, paths *[][]arc) {
 			if arc.cat == infix && lastArc.cat == infix {
 				continue
 			}
+			// An infix character cannot follow on a word
+			// part ending in the same character as the infix character
+			if len(lastArc.strn) > 0 { // (Don't understand how a previous arc can be the empty string, but OK...)
+				r := []rune(lastArc.strn)
+				//fmt.Printf("LAST ARC: '%s'\n", lastArc.strn)
+				lastChar := string(r[len(r)-1])
+				if arc.cat == infix && lastChar == arc.strn {
+					continue
+				}
+			}
+
 		}
 		// Keep treading down the path
 		newPath := currPath
