@@ -110,7 +110,6 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
     Lines added: 30274
     Lines removed: 0
     decomper: loaded file 'decomp_files/nob_nst.txt'
-    decompserver: skipping file: 'decomp_files/nob_nst.txt~'
     Lines read: 41888
     Lines skipped: 0
     Lines added: 41887
