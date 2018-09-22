@@ -364,11 +364,13 @@ func main() {
 	r.HandleFunc("/ping", ping).Methods("get", "post")
 	r.HandleFunc("/decomp", decompMain).Methods("get")
 	r.HandleFunc("/decomp/list_decompers", listDecompers).Methods("get", "post")
-	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")                   //, "post")
-	r.HandleFunc("/decomp/{decomper_name}/add_prefix/{prefix}", addPrefix).Methods("get")       //, "post")
-	r.HandleFunc("/decomp/{decomper_name}/remove_prefix/{prefix}", removePrefix).Methods("get") //, "post")
-	r.HandleFunc("/decomp/{decomper_name}/add_suffix/{suffix}", addSuffix).Methods("get")       //, "post")
-	r.HandleFunc("/decomp/{decomper_name}/remove_suffix/{suffix}", removeSuffix).Methods("get") //, "post")
+	r.HandleFunc("/decomp/{decomper_name}/{word}", decompWord).Methods("get")
+	r.HandleFunc("/decomp/{decomper_name}/add_prefix/{prefix}", addPrefix).Methods("get")
+	r.HandleFunc("/decomp/{decomper_name}/remove_prefix/{prefix}", removePrefix).Methods("get")
+	r.HandleFunc("/decomp/{decomper_name}/add_suffix/{suffix}", addSuffix).Methods("get")
+	r.HandleFunc("/decomp/{decomper_name}/remove_suffix/{suffix}", removeSuffix).Methods("get")
+
+	//r.HandleFunc("/decomp/demo", demo).Methods("get")
 
 	// List route URLs to use as simple on-line documentation (at "/")
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {

@@ -63,6 +63,7 @@ TODO: Add a way to select between guesses of equal number of word parts. This mi
 
 TODO: Better handle spurious linking characters, such as in  `glas s trut` and `glass s trut` above.
 
+TODO: Describe the labels of the word parts file ().
 
 # Running it
 
@@ -100,17 +101,24 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
 
     cd decompserver/
 
-    go run decompserver/decompserver.go 
+    go run decompserver.go 
     decompserver <DECOMPFILES DIR>
 
-    go run decompserver/decompserver.go decompserver/decomp_files/
-    Lines read: 41887
+    go run decompserver.go decomp_files/
+    Lines read: 30275
+    Lines skipped: 0
+    Lines added: 30274
+    Lines removed: 0
+    decomper: loaded file 'decomp_files/nob_nst.txt'
+    decompserver: skipping file: 'decomp_files/nob_nst.txt~'
+    Lines read: 41888
     Lines skipped: 0
     Lines added: 41887
     Lines removed: 0
-    decomper: loaded file 'decompserver/decomp_files/sv_nst.txt'
-    2018/09/19 21:04:05 starting decomp server at port :6778`
+    decomper: loaded file 'decomp_files/sv_nst.txt'
+    2018/09/22 11:22:29 starting decomp server at port :6778
 
+ 
 
 Go to localhost:6778 to see the API calls, either in your browser or using e.g. curl:
 
