@@ -151,7 +151,7 @@ Try a decomper (`sv_nst`) and a word (`zebrafinkar`):
 
 ### Web demo at `http://localhost:6778/demo.html`
 
-The server must currently be started from its own directory, as above, in order for web demo page to work (the `static` directory is hard wired).
+The server must currently be started from its own directory, as above, in order for the web demo page to work (the `static` directory is hard wired).
 
 
 
