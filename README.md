@@ -9,11 +9,18 @@ See the top of `sv_nst.txt`.
 When there are several possible guesses for a word, all are presented in ascending order of number of word parts. Typically, guesses with the least number of word parts are better.
 
 
-Examples:
+## Examples:
 
     filmstjärna
     film stjärna
 
+    tidningsartikel
+    tidning s artikel    
+
+(`tidning` is listed as  PREFIX, `s` is defined INFIX and `artikel` is listed as a SUFFIX in the word parts file.)
+
+
+## Examples of competing guesses:
 
     fiskeskär
 
@@ -38,14 +45,16 @@ TODO: Add a way to select between guesses of equal number of word parts. This mi
 TODO: Better handle spurious linking characters, such as in  `glas s trut` and `glass s trut` above.
 
 
-To try it out, clone this repo, then
+# Running it
+
+## To try it out, clone this repo, then
 
     cd decomp
     go get ./...
     go test
     
 
-Command line
+## Command line
 
     go run cmd/decomper/decomper.go
     decomper <DECOMP FILE> <words...>|<STDIN>
@@ -68,7 +77,7 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
     nattåg	natt+tåg
 
 
-HTTP Server (must be started from its own directory in order for web demo page to work, I think)
+## HTTP Server (must be started from its own directory in order for web demo page to work, I think)
 
     cd decompserver/
 
@@ -84,7 +93,7 @@ HTTP Server (must be started from its own directory in order for web demo page t
     2018/09/19 21:04:05 starting decomp server at port :6778`
 
 
-Web demo at `http://localhost:6778/demo.html`
+## Web demo at `http://localhost:6778/demo.html`
 
 
 Go to localhost:6778 to see the API calls:
