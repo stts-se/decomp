@@ -27,6 +27,12 @@ All examples below are in Swedish.
     filmstjärna
     film stjärna
 
+    operasångaren
+    opera sångaren
+
+    dansbandssångare
+    dans band s sångare
+
     tidningsartikel
     tidning s artikel    
 
@@ -106,12 +112,7 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
     2018/09/19 21:04:05 starting decomp server at port :6778`
 
 
-## Web demo at `http://localhost:6778/demo.html`
-
-The server must currently be started from its own directory, as above, in order for web demo page to work (the `static` directory is hard wired).
-
-
-Go to localhost:6778 to see the API calls:
+Go to localhost:6778 to see the API calls, either in your browser or using e.g. curl:
 
     curl http://localhost:6778/
     /
@@ -124,11 +125,23 @@ Go to localhost:6778 to see the API calls:
     /decomp/{decomper_name}/add_suffix/{suffix}
     /decomp/{decomper_name}/remove_suffix/{suffix}
 
+
+List the current decompers:
+
     curl http://localhost:6778/decomp/list_decompers
     ["nob_nst","sv_nst"]
 
+
+Try a decomper and a word
+
     curl http://localhost:6778/decomp/sv_nst/zebrafinkar
     [{"parts":["zebra","finkar"]}]
+
+
+
+### Web demo at `http://localhost:6778/demo.html`
+
+The server must currently be started from its own directory, as above, in order for web demo page to work (the `static` directory is hard wired).
 
 
 
