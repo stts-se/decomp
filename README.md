@@ -139,7 +139,7 @@ List the current decompers:
     ["nob_nst","sv_nst"]
 
 
-Try a decomper and a word
+Try a decomper (sv_nst) and a word (zebrafinkar):
 
     curl http://localhost:6778/decomp/sv_nst/zebrafinkar
     [{"parts":["zebra","finkar"]}]
