@@ -40,7 +40,7 @@ The word part `tidning` is listed as  PREFIX, `s` is defined INFIX and `artikel`
     fiske skär
     fiske s kär
 
-Above, the first guess is correct.
+Above, the first guess, with the least number of compound parts, is correct.
 
     glasstrut
 
