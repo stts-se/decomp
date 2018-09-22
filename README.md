@@ -3,6 +3,7 @@ decomp.Decompounder is used for guessing compound boundaries of compound words, 
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
 
+There is two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.tst`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.tst`. You will most likely need to add word parts to these files for your own application or domain (see web API below).
 
 ## Linking -s-
 
@@ -11,7 +12,7 @@ There may be a single linking character between compound parts, as in `tidningsa
 
 ## Triple identical characters collapsed into two at compound boundaries
 
-By using the ALLOWED_TRIPLE_CHARS tag, it's possible to enumerate a set of characters that may be collapsed into two, such as in `natt+tåg -> nattåg`. 
+By using the ALLOWED_TRIPLE_CHARS tag, it is possible to enumerate a set of characters that may be collapsed into two, such as in `natt+tåg -> nattåg`. 
 See the top of `sv_nst.txt`.
 
 ## All possible guesses are generated
@@ -20,6 +21,8 @@ When there are several possible guesses for a word, all are presented in ascendi
 
 
 ## Examples:
+
+All examples below are in Swedish.
 
     filmstjärna
     film stjärna
@@ -87,7 +90,7 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
     nattåg	natt+tåg
 
 
-## HTTP Server (must be started from its own directory in order for web demo page to work, I think)
+## HTTP Server
 
     cd decompserver/
 
@@ -104,6 +107,8 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
 
 
 ## Web demo at `http://localhost:6778/demo.html`
+
+The server must currently be started from its own directory, as above, in order for web demo page to work (the `static` directory is hard wired).
 
 
 Go to localhost:6778 to see the API calls:
