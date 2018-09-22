@@ -3,7 +3,7 @@
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
 
-There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.txt`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.txt`. You will most likely need to add word parts to these files for your own application or domain (see web API below).
+There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.txt`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.txt`. You will most likely need to add word parts to these files for your own application or domain. (See HTTP API below if you want to set up a simple server.)
 
 [Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
 
