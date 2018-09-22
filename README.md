@@ -3,7 +3,7 @@ decomp.Decompounder is used for guessing compound boundaries of compound words, 
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
 
-There is two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.tst`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.tst`. You will most likely need to add word parts to these files for your own application or domain (see web API below).
+There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.tst`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.tst`. You will most likely need to add word parts to these files for your own application or domain (see web API below).
 
 ## Linking -s-
 
