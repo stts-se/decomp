@@ -1,10 +1,20 @@
 # decomp
 decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
-It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix. There may be a single linking character (these are defined in the compound part file using the INFIX tag) between compound parts.
+It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
+
+
+## Linking -s-
+
+There may be a single linking character between compound parts, as in `tidningsartikel -> tidning s artikel`. These are defined in the words parts file using the INFIX label.
+
+
+## Triple identical characters collapsed into two at compound boundaries
 
 By using the ALLOWED_TRIPLE_CHARS tag, it's possible to enumerate a set of characters that may be collapsed into two, such as in `natt+tåg -> nattåg`. 
 See the top of `sv_nst.txt`.
+
+## All possible guesses are generated
 
 When there are several possible guesses for a word, all are presented in ascending order of number of word parts. Typically, guesses with the least number of word parts are better.
 
@@ -17,7 +27,7 @@ When there are several possible guesses for a word, all are presented in ascendi
     tidningsartikel
     tidning s artikel    
 
-(`tidning` is listed as  PREFIX, `s` is defined INFIX and `artikel` is listed as a SUFFIX in the word parts file.)
+The word part `tidning` is listed as  PREFIX, `s` is defined INFIX and `artikel` is listed as a SUFFIX in the word parts file.
 
 
 ## Examples of competing guesses:
@@ -27,7 +37,7 @@ When there are several possible guesses for a word, all are presented in ascendi
     fiske skär
     fiske s kär
 
-(Above, the first guess is correct.)
+Above, the first guess is correct.
 
     glasstrut
 
@@ -37,7 +47,7 @@ When there are several possible guesses for a word, all are presented in ascendi
     glas s trut
     glass s trut
 
-(Above, all first three are possible, but the third one is the "correct" one.) 
+Above, all first three are possible, but the third one, `glass strut`, is the "correct" one. Notice that three `s` have becom two in the compound.
 
 
 TODO: Add a way to select between guesses of equal number of word parts. This might be possible to do using word part frequencies. 
