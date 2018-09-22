@@ -58,12 +58,6 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	decomperName := vars["decomper_name"]
-	// if "" == lang {
-	// 	msg := "no value for the expected 'lang' parameter"
-	// 	log.Println(msg)
-	// 	http.Error(w, msg, http.StatusBadRequest)
-	// 	return
-	// }
 
 	prefix := strings.ToLower(vars["prefix"])
 	if prefix == "" {

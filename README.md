@@ -63,7 +63,7 @@ TODO: Add a way to select between guesses of equal number of word parts. This mi
 
 TODO: Better handle spurious linking characters, such as in  `glas s trut` and `glass s trut` above.
 
-TODO: Describe the labels of the word parts file ().
+TODO: Describe the REMOVE label of the word parts file, etc.
 
 # Running it
 
