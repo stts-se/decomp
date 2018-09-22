@@ -56,7 +56,7 @@ Above, the first guess, with the least number of compound parts, is correct.
     glas s trut
     glass s trut
 
-Above, all first three are possible, but the third one, `glass strut`, is the "correct" one. Notice that three `s` have becom two in the compound.
+Above, all first three are possible, but the third one, `glass strut`, is the "correct" one. (Notice that three `s` have become two in the compound.)
 
 
 TODO: Add a way to select between guesses of equal number of word parts. This might be possible to do using word part frequencies. 
