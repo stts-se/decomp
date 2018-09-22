@@ -5,6 +5,8 @@ It reads a file of possible compound parts, that are either a "prefix" or a "suf
 
 There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.tst`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.tst`. You will most likely need to add word parts to these files for your own application or domain (see web API below).
 
+[Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
+
 ## Linking -s-
 
 There may be a single linking character between compound parts, as in `tidningsartikel -> tidning s artikel`. These are defined in the words parts file using the INFIX label.
