@@ -1,5 +1,5 @@
 # decomp
-decomp.Decompounder is used for guessing compound boundaries of compound words, given a list of possible word parts.
+`decomp.Decompounder` is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
 
