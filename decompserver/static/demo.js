@@ -23,7 +23,7 @@ document.getElementById("remove_suffix_button").addEventListener("click", remove
 
 function runDecomp() {
     
-    let word = document.getElementById("input_word").value;
+    let word = document.getElementById("input_word").value.toLowerCase();
     let select = document.getElementById("decomp_select");
     var decomper = select.options[select.selectedIndex].value;
     let decompURL = baseURL + "/decomp/" + encodeURIComponent(decomper) + "/" + encodeURIComponent(word);
@@ -40,26 +40,37 @@ function runDecomp() {
 		let resp = xhr.responseText;
 		let respObj = JSON.parse(resp);
 		let res = "";
+		// If no compound parts, just present the original
+		// word
+		if ( respObj.length === 0) {
+		    res = word; 
+		}
 		for (var i=0; i < respObj.length; i++) {
 		    //console.log("PARTS", resObj[i].parts);
 		    res += respObj[i].parts.join(" ") + "\n";
 		}
-
+		
 		
 		document.getElementById("output").innerText = res;
-	    } // TODO on error
+	    } 
+	} else {
+	    document.getElementById("message_div").innerText = xhr.responseText;
 	}
+    };
+
+    xhr.onerror = function(evt) {
+	document.getElementById("message_div").innerText = "ERROR: Failed to call server";
     };
     
     xhr.send();
 }
 
 
-// TODO Woohoo, copy and paste x 4 below !!!
+// TODO Woohoo, copy and paste below !!!
 
 function addPrefix() {
     
-    let word = document.getElementById("prefix_input").value;
+    let word = document.getElementById("prefix_input").value.toLowerCase();
 
     if (word.trim() === "") {
 	return;
@@ -84,13 +95,17 @@ function addPrefix() {
 	    } // TODO on error
 	}
     };
+
+    xhr.onerror = function(evt) {
+	document.getElementById("message_div").innerText = "ERROR: Failed to call server";
+    };
     
     xhr.send();
 }
 
 function removePrefix() {
     
-    let word = document.getElementById("prefix_input").value;
+    let word = document.getElementById("prefix_input").value.toLowerCase();
 
     if (word.trim() === "") {
 	return;
@@ -115,6 +130,10 @@ function removePrefix() {
 	    } // TODO on error
 	}
     };
+
+    xhr.onerror = function(evt) {
+	document.getElementById("message_div").innerText = "ERROR: Failed to call server";
+    };
     
     xhr.send();
 }
@@ -122,7 +141,7 @@ function removePrefix() {
 
 function addSuffix() {
     
-    let word = document.getElementById("suffix_input").value;
+    let word = document.getElementById("suffix_input").value.toLowerCase();
 
     if (word.trim() === "") {
 	return;
@@ -147,14 +166,18 @@ function addSuffix() {
 	    } // TODO on error
 	}
     };
+
+    xhr.onerror = function(evt) {
+	document.getElementById("message_div").innerText = "ERROR: Failed to call server";
+    };
     
     xhr.send();
 }
 
 function removeSuffix() {
     
-    let word = document.getElementById("suffix_input").value;
-
+    let word = document.getElementById("suffix_input").value.toLowerCase();
+    
     if (word.trim() === "") {
 	return;
     }
@@ -177,6 +200,10 @@ function removeSuffix() {
 		document.getElementById("message_div").innerText = res;
 	    } // TODO on error
 	}
+    };
+    
+    xhr.onerror = function(evt) {
+	document.getElementById("message_div").innerText = "ERROR: Failed to call server";
     };
     
     xhr.send();
