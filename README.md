@@ -149,10 +149,13 @@ Try a decomper (`sv_nst`) and a word (`zebrafinkar`):
 
 
 
-### Web demo at `http://localhost:6778/demo.html`
+### Web demo
 
-The server must currently be started from its own directory, as above, in order for the web demo page to work (the `static` directory is hard wired).
+After starting the server, go to `http://localhost:6778/demo.html` in your browser for a minimalistic demo, that lets you try the decompounder on new words, and update the guesser by adding and removing word parts ("prefixes" and "suffixes"). 
 
+The server must currently be started from its own directory, as above, in order for the web demo page to work.
+
+To change the values of the INFIX and ALLOWED_TRIPLE_CHARS labels, you currently have to edit the word part files manually.
 
 
 [![GoDoc](https://godoc.org/github.com/stts-se/decomp?status.svg)](https://godoc.org/github.com/stts-se/decomp) [![Go Report Card](https://goreportcard.com/badge/github.com/stts-se/decomp)](https://goreportcard.com/report/github.com/stts-se/decomp) [![Build Status](https://travis-ci.org/stts-se/decomp.svg?branch=master)](https://travis-ci.org/stts-se/decomp)
