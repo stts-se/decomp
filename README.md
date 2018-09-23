@@ -7,7 +7,7 @@ There are two compound word files available in this repo, one for Swedish, `deco
 
 These files are generated from lexicon files published by [Språkbanken](https://www.nb.no/sprakbanken/). (Short as well as low frequent word parts have been omitted from the generated files, however.)
 
-You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server for easily adding and removing word part, see the HTTP API and web demo page described below.)
+You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server for easily adding and removing word part, see the HTTP API and browser demo page described below.)
 
 The code is documented here: [Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
 
@@ -149,11 +149,11 @@ Try a decomper (`sv_nst`) and a word (`zebrafinkar`):
 
 
 
-### Web demo
+### Browser demo
 
 After starting the server, go to `http://localhost:6778/demo.html` in your browser for a minimalistic demo, that lets you try the decompounder on new words, and update the guesser by adding and removing word parts ("prefixes" and "suffixes"). 
 
-The server must currently be started from its own directory, as above, in order for the web demo page to work.
+The server must currently be started from its own directory, as above, in order for the demo page to work.
 
 To change the values of the INFIX and ALLOWED_TRIPLE_CHARS labels, you currently have to edit the word part files manually.
 
