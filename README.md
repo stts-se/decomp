@@ -5,7 +5,7 @@ It reads a file of possible compound parts, that are either a "prefix" or a "suf
 
 There are two compound word files available in this repo, one for Swedish, `decompserver/decomp_files/sv_nst.txt`, and one for Norwegian Bokmål, `decompserver/decomp_files/nob_nst.txt`. 
 
-These files are generated from lexicon files published by [Språkbanken](https://www.nb.no/sprakbanken/). (Short as well as low frequent words parts have been omitted from the generated files, however.)
+These files are generated from lexicon files published by [Språkbanken](https://www.nb.no/sprakbanken/). (Short as well as low frequent word parts have been omitted from the generated files, however.)
 
 You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server for easily adding and removing word part, see the HTTP API and web demo page described below.)
 
