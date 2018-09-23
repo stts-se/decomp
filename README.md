@@ -9,7 +9,7 @@ These files are generated from lexicon files published by [Språkbanken](https:/
 
 You will most likely need to add word parts to these files for your own application or domain. (If you want to set up a simple server for easily adding and removing word part, see the HTTP API and web demo page described below.)
 
-[Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
+The code documentation: [Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
 
 ## Linking -s-
 
