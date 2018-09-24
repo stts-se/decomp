@@ -99,7 +99,7 @@ func (t *tNode) remove(s string) bool {
 	}
 
 	sons := t.sons
-	for i, r := range s {
+	for i, r := range []rune(s) {
 		if v, ok := sons[r]; ok {
 			if i == utf8.RuneCountInString(s)-1 { // last rune of s
 				v.leaf = false

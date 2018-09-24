@@ -614,7 +614,10 @@ func TestRemoveBug(t *testing.T) {
 		t.Errorf(ts, w, g)
 	}
 
-	decomp.RemoveSuffix(s2)
+	removeRes := decomp.RemoveSuffix(s2)
+	if !removeRes {
+		t.Errorf(ts, true, removeRes)
+	}
 
 	res = decomp.Decomp(w)
 
@@ -625,22 +628,23 @@ func TestRemoveBug(t *testing.T) {
 	// Wanted: präst gård s vägen
 	if w, g := 4, len(res[0]); w != g {
 		t.Errorf(ts, w, g)
-	}
+	} else {
 
-	if w, g := "präst", res[0][0]; w != g {
-		t.Errorf(ts, w, g)
-	}
+		if w, g := "präst", res[0][0]; w != g {
+			t.Errorf(ts, w, g)
+		}
 
-	if w, g := "gård", res[0][1]; w != g {
-		t.Errorf(ts, w, g)
-	}
+		if w, g := "gård", res[0][1]; w != g {
+			t.Errorf(ts, w, g)
+		}
 
-	if w, g := "s", res[0][2]; w != g {
-		t.Errorf(ts, w, g)
-	}
+		if w, g := "s", res[0][2]; w != g {
+			t.Errorf(ts, w, g)
+		}
 
-	if w, g := "vägen", res[0][2]; w != g {
-		t.Errorf(ts, w, g)
+		if w, g := "vägen", res[0][3]; w != g {
+			t.Errorf(ts, w, g)
+		}
 	}
 
 }
