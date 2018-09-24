@@ -164,10 +164,12 @@ func (t *tNode) prefixes(s string) []arc {
 	sons := t.sons
 	for i, r := range s {
 		// path in tree
+
+		//fmt.Printf("XXXXX >>> %s %d\n", string(r), i)
 		if v, ok := sons[r]; ok {
 			sons = v.sons
 			// '&& i < len(s)-1' ensures that the prefix is shorter than s
-			if v.leaf && i < utf8.RuneCountInString(s)-1 {
+			if v.leaf && i < len(s)-1 {
 				res = append(res, arc{end: i + 1, cat: prefix})
 			}
 		} else { // not a path in tree

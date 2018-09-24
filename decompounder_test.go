@@ -149,6 +149,136 @@ func TestTree(t *testing.T) {
 
 }
 
+func TestTreeUTFx(t *testing.T) {
+
+	tr := newtNode()
+
+	if want, got := rune(0), tr.r; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	tr = tr.add("stråt")
+	tr = tr.add("stråtnös")
+	tr = tr.add("stråtnösar")
+
+	all := tr.list()
+	if want, got := 3, len(all); want != got {
+		t.Errorf(ts, want, got)
+	}
+	if want, got := true, contains(all, "stråt"); want != got {
+		t.Errorf(ts, want, got)
+	}
+	if want, got := true, contains(all, "stråtnös"); want != got {
+		t.Errorf(ts, want, got)
+	}
+	if want, got := true, contains(all, "stråtnösar"); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	cntns1 := tr.contains("stråt")
+	if want, got := true, cntns1; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	rem1 := tr.remove("stråt")
+	if want, got := true, rem1; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	cntns2 := tr.contains("stråt")
+	if want, got := false, cntns2; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	tr = tr.add("stråt")
+
+	cntns3 := tr.contains("stråtnösar")
+	if want, got := true, cntns3; want != got {
+		t.Errorf(ts, want, got)
+	}
+	rem2 := tr.remove("stråtnösar")
+	if want, got := true, rem2; want != got {
+		t.Errorf(ts, want, got)
+	}
+	cntns4 := tr.contains("stråtnösar")
+	if want, got := false, cntns4; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	tr = tr.add("stråtnösar")
+
+	// for k, v := range tr.sons {
+	//     fmt.Printf("HOJSAN: %#v : %s\n", k, string(v.r))
+	// }
+
+	if want, got := rune(0), tr.r; want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	if want, got := 1, len(tr.sons); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	s1 := "stråtnösarna"
+	prfs := tr.prefixes(s1)
+	fmt.Printf("Arcs: %#v\n", prfs)
+	if want, got := 3, len(prfs); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	// for _, p := range prfs {
+	//     fmt.Printf("PREFIX: %v\n", s1[p.start:p.end])
+	// }
+
+	pt := newPrefixTree()
+	pt.Add("ap")
+	pt.Add("hund")
+	pt.Add("aphund")
+	pt.Add("nos")
+
+	s := "aphundar"
+	arczz := pt.Prefixes(s)
+	if want, got := 2, len(arczz); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	prefs := map[string]bool{s[arczz[0].start:arczz[0].end]: true, s[arczz[1].start:arczz[1].end]: true}
+	if _, ok := prefs["ap"]; !ok {
+		t.Errorf(ts, "'ap'", "nothing")
+	}
+	if _, ok := prefs["aphund"]; !ok {
+		t.Errorf(ts, "'aphund'", "nothing")
+	}
+
+	st := newSuffixTree()
+
+	st.Add("rot")
+	st.Add("mos")
+	st.Add("nos")
+
+	z := "skrotmos"
+	arcs := st.Suffixes(z)
+	if want, got := 1, len(arcs); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	st.Add("rotmos")
+	arcs = st.Suffixes(z)
+	//fmt.Printf("ARKZ: %#v\n", arcs)
+	if want, got := 2, len(arcs); want != got {
+		t.Errorf(ts, want, got)
+	}
+
+	suffs := map[string]bool{z[arcs[0].start:arcs[0].end]: true, z[arcs[1].start:arcs[1].end]: true}
+	if _, ok := suffs["mos"]; !ok {
+		t.Errorf(ts, "'mos'", "nothing")
+	}
+	if _, ok := suffs["rotmos"]; !ok {
+		t.Errorf(ts, "'rotmos'", "nothing")
+	}
+
+}
+
 func TestPaths(t *testing.T) {
 
 	a1 := arc{start: 0, end: 3}
