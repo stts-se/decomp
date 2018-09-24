@@ -221,7 +221,7 @@ func TestTreeUTFx(t *testing.T) {
 
 	s1 := "stråtnösarna"
 	prfs := tr.prefixes(s1)
-	fmt.Printf("Arcs: %#v\n", prfs)
+	//fmt.Printf("Arcs: %#v\n", prfs)
 	if want, got := 3, len(prfs); want != got {
 		t.Errorf(ts, want, got)
 	}
