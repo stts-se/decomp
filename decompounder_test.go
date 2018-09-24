@@ -546,26 +546,6 @@ func TestInfixS(t *testing.T) {
 		t.Errorf(ts, w, g)
 	}
 
-	// A prefix ending in linking character cannot be followed by that linking character
-	// glas+s+strut or glass+s+trut should not be generated
-	decomp.AddPrefix("glass")
-	decomp.AddPrefix("glas")
-	decomp.AddSuffix("strut")
-	decomp.AddSuffix("trut")
-	// glas+strut
-	// glass+trut
-	glassRes := decomp.Decomp("glasstrut")
-	if w, g := 2, len(glassRes); w != g {
-		t.Errorf(ts, w, g)
-	}
-
-	// Let's allow glass+strut
-	decomp.AllowedTripleChars([]rune{'s'})
-	glassRes = decomp.Decomp("glasstrut")
-	if w, g := 3, len(glassRes); w != g {
-		t.Errorf(ts, w, g)
-	}
-
 }
 
 func TestLoadFromFile(t *testing.T) {
@@ -606,4 +586,61 @@ func TestLoadFromFile(t *testing.T) {
 	if errf != nil {
 		t.Errorf("%v", errf)
 	}
+}
+
+func TestRemoveBug(t *testing.T) {
+
+	w := "prästgårdsvägen"
+	infix := "s"
+
+	p1 := "präst"
+	p2 := "gård"
+
+	s1 := "vägen"
+	s2 := "svägen" // REMOVE THIS
+
+	decomp := NewDecompounder()
+	decomp.AddPrefix(p1)
+	decomp.AddPrefix(p2)
+
+	decomp.AddInfix(infix)
+
+	decomp.AddSuffix(s1)
+	decomp.AddSuffix(s2)
+
+	res := decomp.Decomp(w)
+
+	if w, g := 2, len(res); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	decomp.RemoveSuffix(s2)
+
+	res = decomp.Decomp(w)
+
+	if w, g := 1, len(res); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	// Wanted: präst gård s vägen
+	if w, g := 4, len(res[0]); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := "präst", res[0][0]; w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := "gård", res[0][1]; w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := "s", res[0][2]; w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := "vägen", res[0][2]; w != g {
+		t.Errorf(ts, w, g)
+	}
+
 }
