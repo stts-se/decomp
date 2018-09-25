@@ -74,7 +74,7 @@ Above, all the three guesses are possible, but the third one, `glass strut`, is 
 
     cd decomp
     go get ./...
-    go test  # SORRY! One of the tests currently fails :(. Working on it...  
+    go test
     
 
 ## Command line
