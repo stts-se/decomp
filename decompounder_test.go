@@ -778,3 +778,33 @@ func TestRemoveBug(t *testing.T) {
 	}
 
 }
+
+func TestTripleConsBug(t *testing.T) {
+	w := "nattågspersonal"
+	s1 := "natt"
+	s2 := "tåg"
+
+	i1 := "s"
+
+	s3 := "personal"
+
+	decomp := NewDecompounder()
+	decomp.AllowedTripleChars([]rune{'t'})
+
+	decomp.AddPrefix(s1)
+	decomp.AddPrefix(s2)
+
+	decomp.AddInfix(i1)
+
+	decomp.AddSuffix(s3)
+
+	res := decomp.Decomp(w)
+
+	if w, g := 1, len(res); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := 4, len(res[0]); w != g {
+		t.Errorf(ts, w, g)
+	}
+}

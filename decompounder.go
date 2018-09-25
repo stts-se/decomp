@@ -165,10 +165,14 @@ func (t *tNode) prefixes(s string) []arc {
 	for i, r := range s {
 		// path in tree
 
-		//fmt.Printf("XXXXX >>> %s %d\n", string(r), i)
+		fmt.Printf("XXXXX >>> %s %d\n", string(r), i)
 		if v, ok := sons[r]; ok {
 			sons = v.sons
 			// '&& i < len(s)-1' ensures that the prefix is shorter than s
+
+			fmt.Printf("ZZZZZ len(s) %d\n", len(s))
+			fmt.Printf("ZZZZZ v.leaf %v\n", v.leaf)
+
 			if v.leaf && i < len(s)-1 {
 				res = append(res, arc{end: i + 1, cat: prefix})
 			}
@@ -323,7 +327,7 @@ func (d Decompounder) arcs(s string) []arc {
 	var res []arc
 
 	res0 := append(res, d.prefixes.RecursivePrefixes(s)...)
-	// fmt.Printf("PREFIX ARCS: %#v\n", res0)
+	fmt.Printf("PREFIX ARCS: %#v\n", res0)
 
 	// for _, a := range res0 {
 	// 	fmt.Printf("arc: %#v : %s\n", a, s[a.start:a.end])
@@ -671,9 +675,9 @@ func (d Decompounder) Decomp(s string) [][]string {
 	var res [][]string
 
 	arcs := d.arcs(s)
-	//fmt.Printf("arcs: %#v\n", arcs)
+	fmt.Printf("arcs: %#v\n", arcs)
 	newArcs := genTripleConsonantArcs(s, d.tripleChars, arcs)
-	//fmt.Printf("newArcs: %#v\n", newArcs)
+	fmt.Printf("newArcs: %#v\n", newArcs)
 	arcs = append(arcs, newArcs...)
 
 	paths := paths(arcs, 0, len(s))
