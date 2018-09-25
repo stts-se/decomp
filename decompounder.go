@@ -215,43 +215,79 @@ func (t prefixTree) Infixes(s string) []arc {
 	return t.infixes.prefixes(s)
 }
 
-func (t prefixTree) RecursivePrefixes(s string) []arc {
+// func (t prefixTree) RRRRecursivePrefixes(s string) []arc {
+// 	//var res []arc
+// 	//t.recursivePrefixes(s, 0, utf8.RuneCountInString(s), &res)
+// 	return t.allPotentialPrefixes(s, 0)
+// }
+
+func (t prefixTree) allPotentialPrefixes(s string, index int) []arc {
+
 	var res []arc
-	t.recursivePrefixes(s, 0, utf8.RuneCountInString(s), &res)
+
+	// Chop one rune at the time, and consume s untill the bitter
+	// end, and collect all prefixes as you go
+
+	i := index
+
+	for _, rLen := utf8.DecodeRuneInString(s[i:]); i < len(s); i += rLen {
+
+		pFixes := t.Prefixes(s[i:])
+
+		for _, a := range pFixes {
+			a.start = a.start + i
+			a.end = a.end + i
+			a.strn = s[a.start:a.end]
+			a.cat = prefix
+			res = append(res, a)
+		}
+
+		iFixes := t.Infixes(s[i:])
+
+		// infixes cannot start a string
+		if i > 0 {
+			for _, a := range iFixes {
+				a.start = a.start + i
+				a.end = a.end + i
+				a.strn = s[a.start:a.end]
+				a.cat = infix
+				res = append(res, a)
+			}
+		}
+	}
+
 	return res
 }
 
-func (t prefixTree) recursivePrefixes(s string, from, to int, as *[]arc) {
+// Why, oh, why is this method so insanely insane?
+// func (t prefixTree) recursivePrefixes(s string, from, to int, as *[]arc) {
 
-	newAs := t.Prefixes(s[from:])
+// 	newAs := t.Prefixes(s[from:])
 
-	for _, a := range newAs {
-		newArc := arc{start: a.start + from, end: a.end + from, cat: prefix}
+// 	for _, a := range newAs {
+// 		newArc := arc{start: a.start + from, end: a.end + from, cat: prefix}
 
-		//fmt.Printf("newArc: %#v\n", newArc)
-		//fmt.Printf("s: %s %s\n", s, s[newArc.start:newArc.end])
+// 		if a.end < to {
+// 			*as = append(*as, newArc)
 
-		if a.end < to {
-			*as = append(*as, newArc)
+// 			// We have found a prefix above.
+// 			// Go looking for potential infixes, and add these to prefix list
+// 			infixes := t.Infixes(s[newArc.end:])
+// 			for _, in := range infixes {
+// 				infix := arc{start: newArc.end, end: in.end + newArc.end, cat: infix}
+// 				if infix.end < to {
+// 					*as = append(*as, infix)
+// 					// TODO Aouch... nested recursion. Fix this to have only one recursive call below.
+// 					// I guess this might blow things up.
+// 					// 'from' could be a list of arcs instead of a single int?
+// 					t.recursivePrefixes(s, infix.end, to, as)
+// 				}
+// 			}
 
-			// We have found a prefix above.
-			// Go looking for potential infixes, and add these to prefix list
-			infixes := t.Infixes(s[newArc.end:])
-			for _, in := range infixes {
-				infix := arc{start: newArc.end, end: in.end + newArc.end, cat: infix}
-				if infix.end < to {
-					*as = append(*as, infix)
-					// TODO Aouch... nested recursion. Fix this to have only one recursive call below.
-					// I guess this might blow things up.
-					// 'from' could be a list of arcs instead of a single int?
-					t.recursivePrefixes(s, infix.end, to, as)
-				}
-			}
-
-			t.recursivePrefixes(s, from+a.end, to, as)
-		}
-	}
-}
+// 			t.recursivePrefixes(s, from+a.end, to, as)
+// 		}
+// 	}
+// }
 
 type suffixTree struct {
 	tree *tNode
@@ -326,7 +362,8 @@ func (d Decompounder) AllowedTripleChars(r []rune) {
 func (d Decompounder) arcs(s string) []arc {
 	var res []arc
 
-	res0 := append(res, d.prefixes.RecursivePrefixes(s)...)
+	//res0 := append(res, d.prefixes.RecursivePrefixes(s)...)
+	res0 := append(res, d.prefixes.allPotentialPrefixes(s, 0)...)
 	//fmt.Printf("PREFIX ARCS: %#v\n", res0)
 
 	// for _, a := range res0 {

@@ -463,14 +463,16 @@ func TestDecompRecursivePrefixes(t *testing.T) {
 	if w, g := 0, len(p6); w != g {
 		t.Errorf(ts, w, g)
 	}
-	p6b := decomp.prefixes.RecursivePrefixes(n3)
-	if w, g := 0, len(p6b); w != g {
-		t.Errorf(ts, w, g)
-	}
-	p6b2 := decomp.prefixes.RecursivePrefixes(n3 + n3)
-	if w, g := 1, len(p6b2); w != g {
-		t.Errorf(ts, w, g)
-	}
+	// p6b := decomp.prefixes.RecursivePrefixes(n3)
+
+	// fmt.Printf("SDGGDSGDG %#v\n", p6b)
+	// if w, g := 0, len(p6b); w != g {
+	// 	t.Errorf(ts, w, g)
+	// }
+	// p6b2 := decomp.prefixes.RecursivePrefixes(n3 + n3)
+	// if w, g := 1, len(p6b2); w != g {
+	// 	t.Errorf(ts, w, g)
+	// }
 
 	decomp.AddSuffix(n3)
 	ds7 := decomp.Decomp(n3)
@@ -696,7 +698,7 @@ func TestLoadFromFile(t *testing.T) {
 	}
 
 	res1 := d.Decomp("grusvägarna")
-	// One suggesting only
+	// One suggestion only
 	if w, g := 1, len(res1); w != g {
 		t.Errorf(ts, w, g)
 	}
@@ -779,32 +781,52 @@ func TestRemoveBug(t *testing.T) {
 
 }
 
-// func TestTripleConsBug(t *testing.T) {
-// 	w := "nattågspersonal"
-// 	s1 := "natt"
-// 	s2 := "tåg"
+func TestAllPotentialPrefixes(t *testing.T) {
+	w := "abcd"
 
-// 	i1 := "s"
+	p1 := "b"
+	p2 := "c"
+	p3 := "bc"
 
-// 	s3 := "personal"
+	pFt := newPrefixTree()
+	pFt.Add(p1)
+	pFt.Add(p2)
+	pFt.Add(p3)
 
-// 	decomp := NewDecompounder()
-// 	decomp.AllowedTripleChars([]rune{'t'})
+	res := pFt.allPotentialPrefixes(w, 0)
 
-// 	decomp.AddPrefix(s1)
-// 	decomp.AddPrefix(s2)
+	if w, g := 3, len(res); w != g {
+		t.Errorf(ts, w, g)
+	}
 
-// 	decomp.AddInfix(i1)
+}
 
-// 	decomp.AddSuffix(s3)
+func TestTripleConsBug(t *testing.T) {
+	w := "nattågspersonal"
+	s1 := "natt"
+	s2 := "tåg"
 
-// 	res := decomp.Decomp(w)
+	i1 := "s"
 
-// 	if w, g := 1, len(res); w != g {
-// 		t.Errorf(ts, w, g)
-// 	}
+	s3 := "personal"
 
-// 	if w, g := 4, len(res[0]); w != g {
-// 		t.Errorf(ts, w, g)
-// 	}
-// }
+	decomp := NewDecompounder()
+	decomp.AllowedTripleChars([]rune{'t'})
+
+	decomp.AddPrefix(s1)
+	decomp.AddPrefix(s2)
+
+	decomp.AddInfix(i1)
+
+	decomp.AddSuffix(s3)
+
+	res := decomp.Decomp(w)
+
+	if w, g := 1, len(res); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	if w, g := 4, len(res[0]); w != g {
+		t.Errorf(ts, w, g)
+	}
+}
