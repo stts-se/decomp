@@ -11,6 +11,8 @@ You will most likely need to add word parts to these files for your own applicat
 
 The code is documented here: [Go docs for decomp](https://godoc.org/github.com/stts-se/decomp).
 
+NOTE: Recent changes to core function, more tests needed.
+
 ## Linking -s-
 
 There may be a single linking character between compound parts, as in `tidningsartikel -> tidning s artikel`. These are defined in the words parts file using the INFIX label.
