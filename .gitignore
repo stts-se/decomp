@@ -3,6 +3,5 @@
 .*
 test_word_parts_out.txt
 Gopkg.lock
-decompserver/decomp_files/nob_nst.txt
-decompserver/decomp_files/sv_nst.txt
+
 
