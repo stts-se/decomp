@@ -364,8 +364,6 @@ func main() {
 	r.HandleFunc("/decomp/{decomper_name}/add_suffix/{suffix}", addSuffix).Methods("get")
 	r.HandleFunc("/decomp/{decomper_name}/remove_suffix/{suffix}", removeSuffix).Methods("get")
 
-	//r.HandleFunc("/decomp/demo", demo).Methods("get")
-
 	// List route URLs to use as simple on-line documentation (at "/")
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		t, err := route.GetPathTemplate()
@@ -375,7 +373,7 @@ func main() {
 		walkedURLs = append(walkedURLs, t)
 		return nil
 	})
-	walkedURLs = append(walkedURLs, "/demo.html")
+	walkedURLs = append(walkedURLs, "/demo")
 
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("static/"))))
 
