@@ -95,7 +95,7 @@ func addPrefix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "added '%s'\n", prefix)
+	fmt.Fprintf(w, "added prefix '%s'\n", prefix)
 }
 
 // TODO cut-and-paste of addPrefix
@@ -170,7 +170,7 @@ func addSuffix(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "added '%s'\n", suffix)
+	fmt.Fprintf(w, "added suffix '%s'\n", suffix)
 }
 
 // TODO cut-and-paste of addSuffix
