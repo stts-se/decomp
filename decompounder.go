@@ -225,7 +225,7 @@ func (t prefixTree) allPotentialPrefixes(s string, index int) []arc {
 
 	var res []arc
 
-	// Chop one rune at the time, and consume s untill the bitter
+	// Chop one rune at the time, and consume s until the bitter
 	// end, and collect all prefixes as you go
 
 	i := index
