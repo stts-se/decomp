@@ -375,6 +375,7 @@ func main() {
 		walkedURLs = append(walkedURLs, t)
 		return nil
 	})
+	walkedURLs = append(walkedURLs, "/demo.html")
 
 	r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("static/"))))
 
