@@ -136,7 +136,7 @@ Go to localhost:6778 to see the API calls, either in your browser or using e.g. 
     /decomp/{decomper_name}/remove_prefix/{prefix}
     /decomp/{decomper_name}/add_suffix/{suffix}
     /decomp/{decomper_name}/remove_suffix/{suffix}
-
+    /demo
 
 List the current decompers:
 
@@ -153,7 +153,7 @@ Try a decomper (`sv_nst`) and a word (`zebrafinkar`):
 
 ### Browser demo
 
-After starting the server, go to `http://localhost:6778/demo.html` in your browser for a minimalistic demo, that lets you try the decompounder on new words, and update the guesser by adding and removing word parts ("prefixes" and "suffixes"). 
+After starting the server, go to `http://localhost:6778/demo` in your browser for a minimalistic demo, that lets you try the decompounder on new words, and update the guesser by adding and removing word parts ("prefixes" and "suffixes"). 
 
 The server must currently be started from its own directory, as above, in order for the demo page to work.
 
