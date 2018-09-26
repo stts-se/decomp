@@ -19,6 +19,23 @@ document.getElementById("remove_prefix_button").addEventListener("click", remove
 document.getElementById("add_suffix_button").addEventListener("click", addSuffix);
 document.getElementById("remove_suffix_button").addEventListener("click", removeSuffix);
 
+document.getElementById("prefix_input")
+    .addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+            document.getElementById("add_prefix_button").click();
+	}
+    });
+
+document.getElementById("suffix_input")
+    .addEventListener("keyup", function(event) {
+	event.preventDefault();
+	if (event.keyCode === 13) {
+            document.getElementById("add_suffix_button").click();
+	}
+    });
+
+
 //}
 
 function runDecomp() {
