@@ -111,7 +111,7 @@ func (t *tNode) remove(rs []rune) bool {
 	sons := t.sons
 	for i, r := range rs {
 		if v, ok := sons[r]; ok {
-			if i == len(rs)-1 { // last rune of s
+			if i == len(rs)-1 { // last rune
 				v.leaf = false
 				return true
 			}
@@ -119,7 +119,7 @@ func (t *tNode) remove(rs []rune) bool {
 			sons = v.sons
 
 		} else {
-			return false // s not a path in t
+			return false // rs not a path in t
 		}
 	}
 
@@ -183,13 +183,9 @@ func (t *tNode) prefixes(rs []rune) []arc {
 	for i, r := range rs {
 		// path in tree
 
-		//fmt.Printf("XXXXX >>> %s %d\n", string(r), i)
 		if v, ok := sons[r]; ok {
 			sons = v.sons
 			// '&& i < len(s)-1' ensures that the prefix is shorter than s
-
-			//fmt.Printf("ZZZZZ len(s) %d\n", len(s))
-			//fmt.Printf("ZZZZZ v.leaf %v\n", v.leaf)
 
 			if v.leaf && i < len(rs)-1 {
 				res = append(res, arc{end: i + 1, cat: prefix})
@@ -235,30 +231,20 @@ func (t prefixTree) Infixes(s string) []arc {
 
 func (t prefixTree) allPotentialPrefixes(rs []rune, index int) []arc {
 
-	//fmt.Printf("allPotentialPrefixes input %s\n", string(rs))
 	var res []arc
 
 	// Chop one rune at the time, and consume rs until the bitter
 	// end, and collect all prefixes as you go
 
 	for i := index; i < len(rs); i++ {
-		//fmt.Printf("allPotentialPrefixes working with %s\n", string(rs[i:]))
 		pFixes := t.Prefixes(string(rs[i:]))
-		//fmt.Printf("allPotentialPrefixes pFixes %#v\n", pFixes)
 
-		//fmt.Printf("allPotentialPrefixes i %#v\n", i)
 		for _, a := range pFixes {
-			//fmt.Printf("allPotentialPrefixes a0 %#v\n", a)
-			//fmt.Printf("allPotentialPrefixes a.start %#v\n", a.start)
 			a.start = a.start + i
-			//fmt.Printf("allPotentialPrefixes a.start %#v\n", a.start)
 			a.end = a.end + i
 			a.strn = string(rs[a.start:a.end])
-			//fmt.Printf("allPotentialPrefixes rs complete %#v\n", string(rs))
-			//fmt.Printf("allPotentialPrefixes rs sub %#v\n", len(rs[a.start:a.end]))
 			a.cat = prefix
 			res = append(res, a)
-			//fmt.Printf("allPotentialPrefixes a1 %#v\n", a)
 		}
 
 		iFixes := t.Infixes(string(rs[i:]))
@@ -311,14 +297,8 @@ func (t suffixTree) Remove(s string) bool {
 func (t suffixTree) Suffixes(s string) []arc {
 	r := reverse(s)
 
-	//fmt.Printf("Suffixes INPUT: %s\n", s)
-	//fmt.Printf("Suffixes REVERSED: %s\n", r)
-
-	// the arcs going from right to left
-	// (strings inverted)
+	// the arcs going from right to left (strings inverted)
 	suffArcs := t.tree.prefixes([]rune(r))
-	//fmt.Printf("Suffixes suffArcs: %v\n", suffArcs)
-	//fmt.Printf("Suffixes suffArcsX: %v\n", string([]rune(r)[0:6]))
 
 	// invert arcs to go from left to right
 	end := len([]rune(r))
@@ -327,7 +307,6 @@ func (t suffixTree) Suffixes(s string) []arc {
 		res = append(res, arc{start: end - a.end, end: end - a.start, cat: suffix})
 	}
 
-	//fmt.Printf("Suffixes OUTPUT: %v\n", res)
 	return res
 }
 
@@ -357,21 +336,9 @@ func (d Decompounder) AllowedTripleChars(r []rune) {
 func (d Decompounder) arcs(rs []rune) []arc {
 	var res []arc
 
-	//fmt.Printf("arcs INPUT: %#v\n", string(rs))
-
-	//res0 := append(res, d.prefixes.RecursivePrefixes(s)...)
 	res0 := append(res, d.prefixes.allPotentialPrefixes(rs, 0)...)
-	//fmt.Printf("arcs PREFIX ARCS: %#v\n", res0)
-
-	// for _, a := range res0 {
-	// 	fmt.Printf("arc: %#v : %s\n", a, s[a.start:a.end])
-	// }
 
 	res1 := append(res, d.suffixes.Suffixes(string(rs))...)
-	//fmt.Printf("SUFFIX ARCS: %#v\n", res1)
-	// for _, a := range res1 {
-	// 	fmt.Printf("arc: %#v : %s\n", a, s[a.start:a.end])
-	// }
 
 	// ensure no duplicate arcs
 	found := make(map[arc]bool)
@@ -388,16 +355,11 @@ func (d Decompounder) arcs(rs []rune) []arc {
 		}
 	}
 
-	//fmt.Printf("arcs TMP res: %#v\n", res)
-
 	// add the actual substrings
 	for i, a := range res {
-		//fmt.Printf("arcs without substrings %#v\n", a)
 		res[i].strn = string(rs[a.start:a.end])
-		//fmt.Printf("arcs actual substrings %#v\n", res[i])
 	}
 
-	//fmt.Printf("arcs OUTPUT: %v\n", res)
 	return res
 }
 
@@ -408,8 +370,6 @@ type endChar struct {
 
 func genTripleConsonantArcs(rs []rune, tripleChars map[rune]bool, arcs []arc) []arc {
 	var res []arc
-
-	//fmt.Printf("EN APA: %v\n", arcs)
 
 	// Add new arcs for pairs of overlapping arcs where the
 	// left arc ends in two tripleChars and the right arc starts
@@ -562,7 +522,6 @@ func (d Decompounder) SaveToFile(fName string) error {
 	// TODO sort lines alphabetically?
 	// This should be done inside d.List() ?
 	for _, s := range d.List() {
-		//fmt.Printf("%s\n", s)
 		w.WriteString(s + "\n")
 
 	}
@@ -607,7 +566,6 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 		fs := strings.SplitN(l, ":", 2)
 		if len(fs) != 2 {
 			//err = fmt.Errorf("invalid line skipped: %s", l)
-			//fmt.Fprintf(os.Stderr, ">>>> invalid line skipped: %s\n", l)
 			linesSkipped++
 			continue
 		}
@@ -644,7 +602,6 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 
 			default:
 
-				//fmt.Fprintf(os.Stderr, "invalid line skipped: %s\n", l)
 				linesSkipped++
 
 			}
@@ -654,7 +611,6 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 		// This check should not be needed? Covered by default below?
 		if fs[0] != aLLOWEDtRIPLEcHARS && fs[0] != pREFIX && fs[0] != iNFIX && fs[0] != sUFFIX {
 			//err = fmt.Errorf("invalid line skipped: %s", l)
-			//fmt.Fprintf(os.Stderr, "invalid line skipped: %s\n", l)
 			linesSkipped++
 			continue
 		}
@@ -673,7 +629,6 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 			res.AddSuffix(strings.ToLower(fs[1]))
 			linesAdded++
 		default:
-			//fmt.Fprintf(os.Stderr, "invalid line skipped: %s\n", l)
 			linesSkipped++
 		}
 
@@ -691,7 +646,6 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 	}
 
 	// TODO if verbose:
-	//fmt.Fprintf(os.Stderr, "Lines read: %d\nLines skipped: %d\nLines added: %d\nLines removed: %d\n", linesRead, linesSkipped, linesAdded, linesRemoved)
 	return res, err
 }
 
@@ -716,19 +670,15 @@ func (d Decompounder) Decomp(s string) [][]string {
 
 	rs := []rune(s)
 	arcs := d.arcs(rs)
-	//fmt.Printf("Decomp arcs: %#v\n", arcs)
 	newArcs := genTripleConsonantArcs(rs, d.tripleChars, arcs)
-	//fmt.Printf("Decomp newArcs: %#v\n", newArcs)
 	arcs = append(arcs, newArcs...)
 
 	paths := paths(arcs, 0, len(rs))
-	//fmt.Printf("Decomp paths: %#v\n", paths)
 
 	for _, p := range paths {
 		res = append(res, pathToDecomp(p, s))
 	}
 	sort.Sort(ByLen(res))
-	//fmt.Printf("Decomp res: %#v\n", res)
 	return res
 }
 
@@ -739,13 +689,11 @@ func paths(as []arc, from, to int) [][]arc {
 	found := make(map[arc]bool)
 	var uniqueAs []arc
 	for _, a := range as {
-		//fmt.Printf("paths dbg: %#v\n", a)
 		if !found[a] {
 			uniqueAs = append(uniqueAs, a)
 			found[a] = true
 		}
 	}
-	//fmt.Printf("paths uniqueAs: %#v\n", uniqueAs)
 
 	arcMap := make(map[int][]arc)
 	for _, a := range uniqueAs {
@@ -753,12 +701,9 @@ func paths(as []arc, from, to int) [][]arc {
 		arcMap[a.start] = append(v, a)
 	}
 
-	//fmt.Printf("paths arcMap: %#v\n", arcMap)
-
 	var path []arc
 	var res [][]arc
 	pathsAccu(arcMap, from, to, path, &res)
-	//fmt.Printf("paths res: %#v\n", res)
 	return res
 }
 
@@ -775,23 +720,19 @@ func pathsAccu(as map[int][]arc, from, to int, currPath []arc, paths *[][]arc) {
 			path := currPath
 			path = append(path, arc)
 			*paths = append(*paths, path)
-			//fmt.Printf("pathsAccu paths: %#v\n", paths)
 		}
 
 		// A path cannot follow consecutive 'infix' arcs
 		if len(currPath) > 0 { // We are not on the first arc
-			//fmt.Printf("pathsAccu dbg: %#v\n", currPath)
 			lastArc := currPath[len(currPath)-1]
 			// Nope, cannot have two infix arcs in a row
 			if arc.cat == infix && lastArc.cat == infix {
 				continue
 			}
-			//fmt.Printf("pathsAccu lastArc: %#v\n", lastArc)
 			// An infix character cannot follow on a word
 			// part ending in the same character as the infix character
 			if len(lastArc.strn) > 0 { // (Don't understand how a previous arc can be the empty string, but OK...)
 				rs := []rune(lastArc.strn)
-				//fmt.Printf("LAST ARC: '%s'\n", lastArc.strn)
 				lastChar := string(rs[len(rs)-1])
 				if arc.cat == infix && lastChar == arc.strn {
 					continue
@@ -801,7 +742,6 @@ func pathsAccu(as map[int][]arc, from, to int, currPath []arc, paths *[][]arc) {
 		// Keep treading down the path
 		newPath := currPath
 		newPath = append(newPath, arc)
-		//fmt.Printf("pathsAccu newPath: %#v\n", newPath)
 
 		pathsAccu(as, arc.end, to, newPath, paths)
 
