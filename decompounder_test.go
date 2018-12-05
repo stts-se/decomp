@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var ts = "Wanted '%v' got '%v'\n"
+var ts = "Wanted %#v got %#v\n"
 
 func spunk() { fmt.Println() }
 
@@ -27,9 +27,9 @@ func TestTree(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("strut")
-	tr = tr.add("strutnos")
-	tr = tr.add("strutnosar")
+	tr = tr.addS("strut")
+	tr = tr.addS("strutnos")
+	tr = tr.addS("strutnosar")
 
 	all := tr.list()
 	if want, got := 3, len(all); want != got {
@@ -50,7 +50,7 @@ func TestTree(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	rem1 := tr.remove("strut")
+	rem1 := tr.removeS("strut")
 	if want, got := true, rem1; want != got {
 		t.Errorf(ts, want, got)
 	}
@@ -60,13 +60,13 @@ func TestTree(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("strut")
+	tr = tr.addS("strut")
 
 	cntns3 := tr.contains("strutnosar")
 	if want, got := true, cntns3; want != got {
 		t.Errorf(ts, want, got)
 	}
-	rem2 := tr.remove("strutnosar")
+	rem2 := tr.removeS("strutnosar")
 	if want, got := true, rem2; want != got {
 		t.Errorf(ts, want, got)
 	}
@@ -75,7 +75,7 @@ func TestTree(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("strutnosar")
+	tr = tr.addS("strutnosar")
 
 	// for k, v := range tr.sons {
 	//     fmt.Printf("HOJSAN: %#v : %s\n", k, string(v.r))
@@ -90,7 +90,7 @@ func TestTree(t *testing.T) {
 	}
 
 	s1 := "strutnosarna"
-	prfs := tr.prefixes(s1)
+	prfs := tr.prefixesS(s1)
 	//fmt.Printf("Arcs: %#v\n", prfs)
 	if want, got := 3, len(prfs); want != got {
 		t.Errorf(ts, want, got)
@@ -157,9 +157,9 @@ func TestTreeUTFx(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("stråt")
-	tr = tr.add("stråtnös")
-	tr = tr.add("stråtnösar")
+	tr = tr.addS("stråt")
+	tr = tr.addS("stråtnös")
+	tr = tr.addS("stråtnösar")
 
 	all := tr.list()
 	if want, got := 3, len(all); want != got {
@@ -180,7 +180,7 @@ func TestTreeUTFx(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	rem1 := tr.remove("stråt")
+	rem1 := tr.removeS("stråt")
 	if want, got := true, rem1; want != got {
 		t.Errorf(ts, want, got)
 	}
@@ -190,13 +190,13 @@ func TestTreeUTFx(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("stråt")
+	tr = tr.addS("stråt")
 
 	cntns3 := tr.contains("stråtnösar")
 	if want, got := true, cntns3; want != got {
 		t.Errorf(ts, want, got)
 	}
-	rem2 := tr.remove("stråtnösar")
+	rem2 := tr.removeS("stråtnösar")
 	if want, got := true, rem2; want != got {
 		t.Errorf(ts, want, got)
 	}
@@ -205,7 +205,7 @@ func TestTreeUTFx(t *testing.T) {
 		t.Errorf(ts, want, got)
 	}
 
-	tr = tr.add("stråtnösar")
+	tr = tr.addS("stråtnösar")
 
 	// for k, v := range tr.sons {
 	//     fmt.Printf("HOJSAN: %#v : %s\n", k, string(v.r))
@@ -220,7 +220,7 @@ func TestTreeUTFx(t *testing.T) {
 	}
 
 	s1 := "stråtnösarna"
-	prfs := tr.prefixes(s1)
+	prfs := tr.prefixesS(s1)
 	//fmt.Printf("Arcs: %#v\n", prfs)
 	if want, got := 3, len(prfs); want != got {
 		t.Errorf(ts, want, got)
@@ -527,6 +527,55 @@ func TestAlen(t *testing.T) {
 
 }
 
+func TestGreek1(t *testing.T) {
+	decomp := NewDecompounder()
+
+	decomp.AddPrefix("μυκηναική")
+	decomp.AddPrefix("μυκη")
+	decomp.AddPrefix("ναικήραγ")
+	decomp.AddSuffix("ναική")
+	decomp.AddSuffix("ραγκαβά")
+	decomp.AddSuffix("καβά")
+	decomp.AddSuffix("βάκα")
+
+	// fallback test for swe with non-ascii chars
+	decomp.AddPrefix("snö")
+	decomp.AddPrefix("snör")
+	decomp.AddSuffix("bollar")
+	ds0a := decomp.Decomp("snörbollar")
+	if w, g := 1, len(ds0a); w != g {
+		t.Errorf(ts, w, g)
+	}
+	ds0b := decomp.Decomp("snöbollar")
+	if w, g := 1, len(ds0b); w != g {
+		t.Errorf(ts, w, g)
+	}
+	p0 := decomp.prefixes.Prefixes("snöra")
+	if w, g := 2, len(p0); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	//test for greek chars
+	cp := decomp.ContainsPrefix("μυκηναική")
+	if w, g := true, cp; w != g {
+		t.Errorf(ts, w, g)
+	}
+
+	p1 := decomp.prefixes.Prefixes("μυκηναική_")
+	if w, g := 2, len(p1); w != g {
+		t.Errorf(ts, w, g)
+	}
+	ds1 := decomp.Decomp("μυκηναικήραγκαβά")
+	if w, g := 2, len(ds1); w != g {
+		t.Errorf(ts, w, g)
+	}
+	ds2 := decomp.Decomp("μυκηβάκα")
+	if w, g := 1, len(ds2); w != g {
+		t.Errorf(ts, w, g)
+	}
+
+}
+
 func TestLenSort(t *testing.T) {
 
 	// return the versions with fewest compound parts first
@@ -793,7 +842,7 @@ func TestAllPotentialPrefixes(t *testing.T) {
 	pFt.Add(p2)
 	pFt.Add(p3)
 
-	res := pFt.allPotentialPrefixes(w, 0)
+	res := pFt.allPotentialPrefixes([]rune(w), 0)
 
 	if w, g := 3, len(res); w != g {
 		t.Errorf(ts, w, g)
