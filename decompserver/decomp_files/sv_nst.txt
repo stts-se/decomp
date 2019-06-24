@@ -13954,6 +13954,7 @@ SUFFIX:putsa
 SUFFIX:rivet
 SUFFIX:breds
 SUFFIX:byxa
+SUFFIX:yxa
 SUFFIX:flyna
 SUFFIX:tuktas
 SUFFIX:visares
