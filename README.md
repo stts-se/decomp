@@ -106,7 +106,10 @@ By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle com
 
     cd decompserver/
 
-    go run decompserver.go 
+    go run decompserver.go <DECOMPFILES DIR>
+
+or
+    go build
     decompserver <DECOMPFILES DIR>
 
     go run decompserver.go decomp_files/
