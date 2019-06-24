@@ -14,6 +14,8 @@ import (
 // Sample invocation: go run decomper.go ../../server/decomp_files/sv_nst.txt hundparkering
 func main() {
 
+	//prettyPrint := true
+
 	if len(os.Args) < 2 {
 		fmt.Fprintf(os.Stderr, "decomper <DECOMP FILE> <words...>|<STDIN>\n")
 		os.Exit(0)
