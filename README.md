@@ -85,20 +85,12 @@ Above, all the three guesses are possible, but the third one, `glass strut`, is 
     decomper <DECOMP FILE> <words...>|<STDIN>
 
     go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt zebrafink
-    Lines read: 41887
-    Lines skipped: 0
-    Lines added: 41887
-    Lines removed: 0
     zebrafink	zebra+fink
 
 
 By adding ALLOWED_TRIPLE_CHARS to the word part file, the guesser can handle compound boundaries where a double character has been assimilated, such as `nattåg -> natt+tåg`:
 
-    go run decomper.go ../../decompserver/decomp_files/sv_nst.txt nattåg
-    Lines read: 41888
-    Lines skipped: 0
-    Lines added: 41887
-    Lines removed: 0
+    go run cmd/decomper/decomper.go decompserver/decomp_files/sv_nst.txt nattåg
     nattåg	natt+tåg
 
 
@@ -113,15 +105,7 @@ or
     decompserver <DECOMPFILES DIR>
 
     go run decompserver.go decomp_files/
-    Lines read: 30275
-    Lines skipped: 0
-    Lines added: 30274
-    Lines removed: 0
     decomper: loaded file 'decomp_files/nob_nst.txt'
-    Lines read: 41888
-    Lines skipped: 0
-    Lines added: 41887
-    Lines removed: 0
     decomper: loaded file 'decomp_files/sv_nst.txt'
     2018/09/22 11:22:29 starting decomp server at port :6778
 
