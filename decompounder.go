@@ -646,6 +646,7 @@ func NewDecompounderFromFile(fileName string) (Decompounder, error) {
 	}
 
 	// TODO if verbose:
+	//fmt.Fprintf(os.Stderr, "Lines read: %d\nLines skipped: %d\nLines added: %d\nLines removed: %d\n", linesRead, linesSkipped, linesAdded, linesRemoved)
 	return res, err
 }
 
