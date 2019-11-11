@@ -476,7 +476,7 @@ func (d Decompounder) List() []string {
 	var res []string
 
 	var triples []rune
-	for k, _ := range d.tripleChars {
+	for k := range d.tripleChars {
 		triples = append(triples, k)
 	}
 
@@ -698,7 +698,7 @@ func paths(as []arc, from, to int) [][]arc {
 
 	arcMap := make(map[int][]arc)
 	for _, a := range uniqueAs {
-		v, _ := arcMap[a.start]
+		v := arcMap[a.start]
 		arcMap[a.start] = append(v, a)
 	}
 
