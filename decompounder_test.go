@@ -8,8 +8,6 @@ import (
 
 var ts = "Wanted %#v got %#v\n"
 
-func spunk() { fmt.Println() }
-
 func contains(ss []string, s string) bool {
 	for _, s0 := range ss {
 		if s == s0 {
