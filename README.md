@@ -1,4 +1,7 @@
 # decomp
+
+[![GoDoc](https://godoc.org/github.com/stts-se/decomp?status.svg)](https://godoc.org/github.com/stts-se/decomp) [![Go Report Card](https://goreportcard.com/badge/github.com/stts-se/decomp)](https://goreportcard.com/report/github.com/stts-se/decomp) [![Github actions workflow status](https://github.com/stts-se/decomp/workflows/Go/badge.svg)](https://github.com/stts-se/decomp/actions)
+
 `decomp.Decompounder` is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
 It reads a file of possible compound parts, that are either a "prefix" or a "suffix". A compound may consist of several prefixes, followed by exactly one suffix.
@@ -147,4 +150,4 @@ The server must currently be started from its own directory, as above, in order 
 To change the values of the INFIX and ALLOWED_TRIPLE_CHARS labels, you currently have to edit the word part files manually.
 
 
-[![GoDoc](https://godoc.org/github.com/stts-se/decomp?status.svg)](https://godoc.org/github.com/stts-se/decomp) [![Go Report Card](https://goreportcard.com/badge/github.com/stts-se/decomp)](https://goreportcard.com/report/github.com/stts-se/decomp) [![Build Status](https://travis-ci.org/stts-se/decomp.svg?branch=master)](https://travis-ci.org/stts-se/decomp)
+
