@@ -53,10 +53,20 @@ func main() {
 		ds := decomp.Decomp(w)
 		if len(ds) == 0 {
 			fmt.Printf("%s\t?\n", w)
+			continue
 		}
+		// for _, d := range ds {
+		// 	fmt.Printf("%s\t%v\n", w, strings.Join(d, "+"))
+		// }
+
+		//TODO Update documentation: now outputs variants on single line
+
+		decomps := []string{}
 		for _, d := range ds {
-			fmt.Printf("%s\t%v\n", w, strings.Join(d, "+"))
+			decomps = append(decomps, strings.Join(d, "+"))
+			// 	fmt.Printf("%s\t%v\n", w, )
 		}
+		fmt.Printf("%s\t%s\n", w, strings.Join(decomps, "\t"))
 	}
 
 }
