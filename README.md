@@ -1,6 +1,6 @@
 # decomp
 
-[![GoDoc](https://godoc.org/github.com/stts-se/decomp?status.svg)](https://godoc.org/github.com/stts-se/decomp) [![Go Report Card](https://goreportcard.com/badge/github.com/stts-se/decomp)](https://goreportcard.com/report/github.com/stts-se/decomp) [![Github actions workflow status](https://github.com/stts-se/decomp/workflows/Go/badge.svg)](https://github.com/stts-se/decomp/actions) ![CodeQL](https://github.com/stts-se/decomp/workflows/CodeQL/badge.svg)
+[![GoDoc](https://godoc.org/github.com/stts-se/decomp?status.svg)](https://godoc.org/github.com/stts-se/decomp) [![Go Report Card](https://goreportcard.com/badge/github.com/stts-se/decomp)](https://goreportcard.com/report/github.com/stts-se/decomp) [![Github actions workflow status](https://github.com/stts-se/decomp/workflows/Go/badge.svg)](https://github.com/stts-se/decomp/actions) [![CodeQL](https://github.com/stts-se/decomp/workflows/CodeQL/badge.svg)](https://github.com/stts-se/decomp/actions)
 
 `decomp.Decompounder` is used for guessing compound boundaries of compound words, given a list of possible word parts.
 
