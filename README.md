@@ -151,3 +151,5 @@ To change the values of the INFIX and ALLOWED_TRIPLE_CHARS labels, you currently
 
 
 
+---
+_This work was supported by the Swedish Post and Telecom Authority (PTS) through the grant "Wikispeech – en användargenererad talsyntes på Wikipedia" (2016–2017)._
